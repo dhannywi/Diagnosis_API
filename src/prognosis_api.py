@@ -4,34 +4,55 @@ import requests
 import json
 import csv
 import matplotlib.pyplot as plt
+import os
 
 app = Flask(__name__)
 
 
+def get_redis_client(db_num: int):
+    redis_ip = os.environ.get('REDIS_IP')
+    if no redis_ip:
+        raise Exception()
+    return redis.Redis(host=redis_ip, port=6379, db=db_num, decode_responses=True)
+
+rd0 = get_redis_client(0)
+rd1 = get_redis_client(1)
+
+
+def get_method() -> dict:
+    global rd0
+    try:
+        return json.loads(rd0.get('breast_cancer_cases')
+    except Exception as err:
+        return f'Error. Data not loaded in\n', 404
+
 @app.route('/data', methods = ['POST', 'GET', 'DELETE'])
 def breast_cancer_data() -> dict:
+    global rd0
     if request.method == 'POST':
-        r = requests.get(url='https://raw.githubusercontent.com/dhannywi/Prognosis_API/main/wdbc.data.csv')
-        data = {}
-        data['breast_cancer_data'] = []
-        csv_data = r.content.decode('utf-8')
-        csv_reader = csv.DictReader(csv_data.splitlines())
-        #json_data = json.dumps([row for row in csv_reader], ensure_ascii=False)
-        for row in csv_reader:
-            data['breast_cancer_data'].append(dict(row))
+
+        try:
+            r = requests.get(url='https://raw.githubusercontent.com/dhannywi/Prognosis_API/main/wdbc.data.csv')
+            data = {}
+            data['breast_cancer_data'] = []
+            csv_data = r.content.decode('utf-8')
+            csv_reader = csv.DictReader(csv_data.splitlines())
+            for row in csv_reader:
+                data['breast_cancer_data'].append(dict(row))
+            rd0.set('breast_cancer_cases', json.dumps(data['brease_cancer_data']))
+        except Exception as err:
+            return f'Error. Data not loaded in\n', 404
         return f'Data loaded in\n'
+
     elif request.method == 'GET':
-
-
+        return get_method()
 
     elif request.method == 'DELETE':
-            
-
-
+        rd0.flushdb()
+        return f'Data deleted\n'
+                          
     else:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
-
-
 
 
 @app.route('/data/id', methods = ['GET'])
