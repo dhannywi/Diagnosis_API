@@ -81,8 +81,12 @@ def id_data(id_num: int) -> dict:
         return f'Error. Data no loaded in\n', 404
 
 
-#@app.route('/outcome', methods = ['GET'])
-#def cases_c
+@app.route('/outcome', methods = ['GET'])
+def get_cases(): -> dict:
+    
+    cases = {"Malignant": {}, "Benign": {}}
+
+    return 'Working on it'
     
 @app.route('/image', methods = ['GET'])
 def create_imaget():
