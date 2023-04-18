@@ -7,6 +7,6 @@ RUN pip install redis==4.5.1
 RUN pip install pyyaml==6.0
 RUN pip install matplotlib==3.7.1
 
-COPY file.py /file.py --change!
+COPY prognosis_api.py /prognosis_api.py
 
-CMD ["python", "file.py"] --change!
+CMD ["python", "prognosis_api.py"]
