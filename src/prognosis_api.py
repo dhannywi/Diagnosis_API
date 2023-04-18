@@ -27,6 +27,7 @@ def get_method() -> dict:
     except Exception as err:
         return f'Error. Data not loaded in\n', 404
 
+
 @app.route('/data', methods = ['POST', 'GET', 'DELETE'])
 def breast_cancer_data() -> dict:
     global rd0
@@ -56,28 +57,41 @@ def breast_cancer_data() -> dict:
 
 
 @app.route('/data/id', methods = ['GET'])
-def breast_cancer_id() -> dict:
-    return f'test'
+def cancer_case_id() -> dict:
+    breast_cancer_data = get_method()
+    try:
+        cancer_cases_id = []
+        for item in breast_cancer_data:
+            cancer_cases_id.append(item.get('ID Number'))
+    except Exception as err:
+        return f'Error. Data no loaded in\n', 404
+    return cancer_cases_id
 
 
 @app.route('/data/id/<id_num>', methods = ['GET'])
-def id_data() -> dict:
-    return f'test'
-
-
-
+def id_data(id_num: int) -> dict:
+    global rd0
+    breast_cancer_data = get_method()
+    try:
+        for item in breast_cancer_data:
+            if item.get('ID Number') == id_num:
+                return item
+        return f'Error. No ID Number found\n', 404
+    except Exception as err:
+        return f'Error. Data no loaded in\n', 404
 
 
 @app.route('/image', methods = ['GET'])
 def create_imaget():
-    return f'test'
-
-
+    return f'Incomplete'
 
 
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
-    return f'test'
+    return '''\n Usage: curl 'localhost:5000[OPTIONS]'\n
+    Options:\n
+    1. /data
+    '''
 
     
 if __name__ == '__main__':
