@@ -23,7 +23,10 @@ rd1 = get_redis_client(1)
 def get_method() -> dict:
     global rd0
     try:
-        return json.loads(rd0.get('breast_cancer_cases'))
+        data = []
+        for item in rd0.keys():
+            data.append(json.loads(rd0.get(item)))
+        return data
     except Exception as err:
         return f'Error. Data not loaded in\n', 404
 
@@ -34,13 +37,12 @@ def breast_cancer_data() -> dict:
     if request.method == 'POST':
         try:
             r = requests.get(url='https://raw.githubusercontent.com/dhannywi/Prognosis_API/main/wdbc.data.csv')
-            data = {}
-            data['breast_cancer_data'] = []
             csv_data = r.content.decode('utf-8')
             csv_reader = csv.DictReader(csv_data.splitlines())
+            data = {}
             for row in csv_reader:
-                data['breast_cancer_data'].append(dict(row))
-            rd0.set('breast_cancer_cases', json.dumps(data['breast_cancer_data']))
+                id_num = row.get('ID Number')
+                rd0.set(id_num, json.dumps(row))
         except Exception as err:
             return f'Error. Data not loaded in\n', 404
         return f'Data loaded in\n'
@@ -58,31 +60,23 @@ def breast_cancer_data() -> dict:
 
 @app.route('/id', methods = ['GET'])
 def cancer_case_id() -> dict:
-    breast_cancer_data = get_method()
-    try:
-        cancer_cases_id = []
-        for item in breast_cancer_data:
-            cancer_cases_id.append(item.get('ID Number'))
-    except Exception as err:
-        return f'Error. Data no loaded in\n', 404
-    return cancer_cases_id
+    if rd0.keys() == 0:
+        return f'Error. Data not loaded in\n', 404
+    return rd0.keys()
 
 
 @app.route('/id/<id_num>', methods = ['GET'])
 def id_data(id_num: int) -> dict:
-    global rd0
-    breast_cancer_data = get_method()
+    if rd0.keys() == 0:
+        return f'Error. Data not loaded in\n', 404
     try:
-        for item in breast_cancer_data:
-            if item.get('ID Number') == id_num:
-                return item
-        return f'Error. No ID Number found\n', 404
+        return json.loads(rd0.get(id_num))
     except Exception as err:
-        return f'Error. Data no loaded in\n', 404
+        return f'Error. ID requested not in data\n', 404
 
 
 @app.route('/outcome', methods = ['GET'])
-def get_cases(): -> dict:
+def get_cases() -> dict:
     
     cases = {"Malignant": {}, "Benign": {}}
 
