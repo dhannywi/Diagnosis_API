@@ -1,7 +1,7 @@
 <div align="center">
 
 ![Research](https://www.houstonmethodist.org/-/media/images/research/cancer-center/cancer_center_banner_1140x400.ashx?h=400&iar=0&mw=1382&w=1140&hash=28362AFB38ACA244FB16263E4AA3E267)
-# Prognosis API
+# ![pink](http://static.skaip.org/img/emoticons/180x180/f6fcff/ribbonpink.gif) Prognosis API ![pink](http://static.skaip.org/img/emoticons/180x180/f6fcff/ribbonpink.gif)
 
 REST API to query data on Breast Cancer Prognosis.  
 
@@ -9,7 +9,7 @@ REST API to query data on Breast Cancer Prognosis.
 
 #
 
-# Data Description
+## Data Description
 The Breast Cancer Wisconsin dataset includes data from hundreds of breast cancer cases to develop an effective prognosis for future cases. 
 For each case, the fine needle aspiration procedure was performed to take a sample from the cell nuclei present within the mass found on the body.
 
@@ -22,9 +22,6 @@ ID Number, Outcome, Radius, Texture, Perimeter, Area, Smoothness, Compactness, C
 
 The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), but we are using a version of the dataset that is available on [Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine).
 
-# Additional Resources
-* [Breast Cancer Prognostics Data - Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine)
-* [UCI at data.world](https://data.world/uci/breast-cancer-wisconsin-prognostic)
 
 ## Implementation
 The project uses **Python 3.8.10**, in particular **Flask 2.2.2** for REST API development, **Redis 7** for NoSQL Database, and **Docker 20.10.12** for containerization. Kubernetes is used for container ochestration and deployment. 
@@ -33,11 +30,11 @@ The project uses **Python 3.8.10**, in particular **Flask 2.2.2** for REST API d
 The file structure of this project is as below:
 ```
 Prognosis_API/
-├── docker
+├── docker/
 │   ├── Dockerfile.api
 │   ├── Dockerfile.wrk
 │   └── docker-compose.yml
-├── kubernetes
+├── kubernetes/
 │   ├── 
 │   ├── 
 │   ├── 
@@ -45,7 +42,7 @@ Prognosis_API/
 │   ├── 
 │   └── 
 ├── README.md
-└── src
+└── src/
     ├── prognosis_api.py
     ├── jobs.py
     └── worker.py
@@ -108,7 +105,10 @@ Since we need to keep the server running in order to make requests, open an addi
 
 ```
 
+## Additional Resources
+* [Breast Cancer Prognostics Data - Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine)
+* [UCI at data.world](https://data.world/uci/breast-cancer-wisconsin-prognostic)
 
-# Authors
+## Authors
 * Dhanny Indrakusuma
 * Pranjal Adhikari
