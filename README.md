@@ -1,10 +1,12 @@
 <div align="center">
 
 ![Research](https://www.houstonmethodist.org/-/media/images/research/cancer-center/cancer_center_banner_1140x400.ashx?h=400&iar=0&mw=1382&w=1140&hash=28362AFB38ACA244FB16263E4AA3E267)
-# ![pink](http://static.skaip.org/img/emoticons/180x180/f6fcff/ribbonpink.gif) Prognosis API ![pink](http://static.skaip.org/img/emoticons/180x180/f6fcff/ribbonpink.gif)
+# Prognosis API
 
 REST API to query data on Breast Cancer Prognosis.  
-
+<img src="https://img.icons8.com/color/512/pink-ribbon.png" width="50" height="50">
+<img src="https://img.icons8.com/color/512/pink-ribbon.png" width="50" height="50">
+<img src="https://img.icons8.com/color/512/pink-ribbon.png" width="50" height="50">
 </div>
 
 #
