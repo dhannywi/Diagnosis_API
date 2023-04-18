@@ -3,7 +3,7 @@
 ![Research](https://www.houstonmethodist.org/-/media/images/research/cancer-center/cancer_center_banner_1140x400.ashx?h=400&iar=0&mw=1382&w=1140&hash=28362AFB38ACA244FB16263E4AA3E267)
 # Prognosis API
 
-API for Breast Cancer Prognosis
+REST API to query data on Breast Cancer Prognosis.  
 
 </div>
 
@@ -16,7 +16,9 @@ For each case, the fine needle aspiration procedure was performed to take a samp
 From the sample, various measurements were taken, including the area, texture, smoothness, and compactness.
 Utilizing these measurements in the dataset, an effective and reliable prognosis can be made to determine the outcome of each case and to predict the survival status based on these features.
 
-**The dataset contains 20 columns with information on:** ID Number, Outcome, Radius, Texture, Perimeter, Area, Smoothness, Compactness, Concavity , Concave Points, Symmetry, Fractal Dimension, Radius Variance, Texture Variance, Perimeter Variance, Area Variance, Smoothness Variance, Compactness Variance, Concavity Variance, Concave Points Variance.
+**The dataset contains 20 columns with information on:** 
+
+ID Number, Outcome, Radius, Texture, Perimeter, Area, Smoothness, Compactness, Concavity , Concave Points, Symmetry, Fractal Dimension, Radius Variance, Texture Variance, Perimeter Variance, Area Variance, Smoothness Variance, Compactness Variance, Concavity Variance, Concave Points Variance.
 
 The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), but we are using a version of the dataset that is available on [Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine).
 
@@ -25,11 +27,11 @@ The original dataset is available from [UCI Machine Learning Repository](https:/
 * [UCI at data.world](https://data.world/uci/breast-cancer-wisconsin-prognostic)
 
 ## Implementation
-The project uses **Python 3.8.10**, in particular **Flask 2.2.2**, and **Docker 20.10.12** for containerization. Kubernetes is used for container ochestration and deployment. 
+The project uses **Python 3.8.10**, in particular **Flask 2.2.2** for REST API development, **Redis 7** for NoSQL Database, and **Docker 20.10.12** for containerization. Kubernetes is used for container ochestration and deployment. 
 
 ### Files
 The file structure of this project is as below:
-'''
+```
 Prognosis_API/
 ├── docker
 │   ├── Dockerfile.api
@@ -47,7 +49,7 @@ Prognosis_API/
     ├── prognosis_api.py
     ├── jobs.py
     └── worker.py
-'''
+```
 
 ## Installation
 
@@ -102,9 +104,9 @@ Below are the routes for you to request data from:
 
 ### Querying data using the REST API
 Since we need to keep the server running in order to make requests, open an additional shell and change your directory to the same directory your server is running. The data has been automatically loaded and you can start querying. Keep in mind that if you accidentally queried using the `DELETE` method, you will need to query using the `POST` method first in order to re-load the dataset into the database. Otherwise, when data has not been loaded/ has been deleted, you will receive an error message. For example:
-'''console
+```console
 
-'''
+```
 
 
 # Authors
