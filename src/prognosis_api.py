@@ -56,7 +56,7 @@ def breast_cancer_data() -> dict:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
 
 
-@app.route('/data/id', methods = ['GET'])
+@app.route('/id', methods = ['GET'])
 def cancer_case_id() -> dict:
     breast_cancer_data = get_method()
     try:
@@ -68,7 +68,7 @@ def cancer_case_id() -> dict:
     return cancer_cases_id
 
 
-@app.route('/data/id/<id_num>', methods = ['GET'])
+@app.route('/id/<id_num>', methods = ['GET'])
 def id_data(id_num: int) -> dict:
     global rd0
     breast_cancer_data = get_method()
@@ -81,6 +81,9 @@ def id_data(id_num: int) -> dict:
         return f'Error. Data no loaded in\n', 404
 
 
+#@app.route('/outcome', methods = ['GET'])
+#def cases_c
+    
 @app.route('/image', methods = ['GET'])
 def create_imaget():
     return f'Incomplete'
