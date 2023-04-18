@@ -1,9 +1,9 @@
 <div align="center">
 
 ![Research](https://www.houstonmethodist.org/-/media/images/research/cancer-center/cancer_center_banner_1140x400.ashx?h=400&iar=0&mw=1382&w=1140&hash=28362AFB38ACA244FB16263E4AA3E267)
-<h1><img src="https://img.icons8.com/color/512/pink-ribbon.png" width="50" height="50">
+<h1><img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
  Prognosis API 
-<img src="https://img.icons8.com/color/512/pink-ribbon.png" width="50" height="50">
+<img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
 </h1>
 
 REST API to query data on Breast Cancer Prognosis.  
@@ -17,9 +17,8 @@ For each case, the fine needle aspiration procedure was performed to take a samp
 
 From the sample, various measurements were taken, including the area, texture, smoothness, and compactness.
 Utilizing these measurements in the dataset, an effective and reliable prognosis can be made to determine the outcome of each case and to predict the survival status based on these features.
-
-**The dataset contains 20 columns with information on:** 
-
+<br><br>
+<b>The dataset contains 20 columns with information on:</b><br>
 ID Number, Outcome, Radius, Texture, Perimeter, Area, Smoothness, Compactness, Concavity , Concave Points, Symmetry, Fractal Dimension, Radius Variance, Texture Variance, Perimeter Variance, Area Variance, Smoothness Variance, Compactness Variance, Concavity Variance, Concave Points Variance.
 
 The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), but we are using a version of the dataset that is available on [Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine).
