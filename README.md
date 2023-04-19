@@ -18,10 +18,29 @@ For each case, the fine needle aspiration procedure was performed to take a samp
 From the sample, various measurements were taken, including the area, texture, smoothness, and compactness.
 Utilizing these measurements in the dataset, an effective and reliable prognosis can be made to determine the outcome of each case and to predict the survival status based on these features.
 <br><br>
-<b>The dataset contains 20 columns with information on:</b><br>
-ID Number, Outcome, Radius, Texture, Perimeter, Area, Smoothness, Compactness, Concavity , Concave Points, Symmetry, Fractal Dimension, Radius Variance, Texture Variance, Perimeter Variance, Area Variance, Smoothness Variance, Compactness Variance, Concavity Variance, Concave Points Variance.
+<b>The dataset contains 32 attributes with information on:</b><br>
+1. ID number
+2. Diagnosis (M = malignant, B = benign)
+<br>Column 3-32 contains ten real-valued features are computed for each cell nucleus:<br>
+* radius (mean of distances from center to points on the perimeter)
+* texture (standard deviation of gray-scale values)
+* perimeter
+* area
+* smoothness (local variation in radius lengths)
+* compactness (perimeter^2 / area - 1.0)
+* concavity (severity of concave portions of the contour)
+* concave points (number of concave portions of the contour)
+* symmetry
+* fractal dimension ("coastline approximation" - 1)
 
-The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), but we are using a version of the dataset that is available on [Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine).
+The mean, standard error, and "worst" or largest (mean of the three
+largest values) of these features were computed for each image,
+resulting in 30 features.  For instance, field 3 is Mean Radius, field
+13 is Radius SE, field 23 is Worst Radius.
+
+All feature values are recoded with four significant digits, with no missing attribute values and class distribution of 357 benign and 212 malignant.
+
+The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), and detailed documentation is available on [University of Wisconsin-Madison](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html) webpage.
 
 
 ## Implementation
