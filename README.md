@@ -21,7 +21,8 @@ Utilizing these measurements in the dataset, an effective and reliable prognosis
 <b>The dataset contains 32 attributes with information on:</b><br>
 1. ID number
 2. Diagnosis (M = malignant, B = benign)
-<br>Column 3-32 contains ten real-valued features are computed for each cell nucleus:<br>
+
+Column 3-32 contains ten real-valued features are computed for each cell nucleus:
 * radius (mean of distances from center to points on the perimeter)
 * texture (standard deviation of gray-scale values)
 * perimeter
@@ -40,7 +41,7 @@ resulting in 30 features.  For instance, field 3 is Mean Radius, field
 
 All feature values are recoded with four significant digits, with no missing attribute values and class distribution of 357 benign and 212 malignant.
 
-The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), and detailed documentation is available on [University of Wisconsin-Madison](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html) webpage.
+The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), and detailed documentation is available on [University of Wisconsin-Madison](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html) research page.
 
 
 ## Implementation
@@ -126,8 +127,8 @@ Since we need to keep the server running in order to make requests, open an addi
 ```
 
 ## Additional Resources
-* [Breast Cancer Prognostics Data - Kaggle](https://www.kaggle.com/datasets/thedevastator/improve-breast-cancer-prognostics-using-machine)
-* [UCI at data.world](https://data.world/uci/breast-cancer-wisconsin-prognostic)
+* [University of Wisconsin-Madison Research](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html)
+* [Breast Cancer Wisconsin (Prognostic) Data Set](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic))
 
 ## Authors
 * Dhanny Indrakusuma
