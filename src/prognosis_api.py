@@ -80,7 +80,7 @@ def get_cases() -> dict:
 
 
 @app.route('/image', methods = ['POST', 'GET', 'DELETE'])
-def create_imaget():
+def image():
     global rd0, rd1
     if request.method == 'POST':
         graph_data = {}
