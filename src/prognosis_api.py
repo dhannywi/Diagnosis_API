@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 import redis
 import requests
 import json
@@ -9,11 +9,11 @@ import yaml
 
 app = Flask(__name__)
 
-redis_ip = os.environ.get('REDIS_IP')
-if not redis_ip:
-    raise Exception()
-rd0 = redis.Redis(host=redis_ip, port=6379, db=0, decode_responses=True)
-rd1 = redis.Redis(host=redis_ip, port=6379, db=1)
+#redis_ip = os.environ.get('REDIS_IP')
+#if not redis_ip:
+#    raise Exception()
+rd0 = redis.Redis(host='redis-db', port=6379, db=0, decode_responses=True)
+rd1 = redis.Redis(host='redis-db', port=6379, db=1)
 
 
 def get_method() -> dict:
@@ -26,7 +26,30 @@ def get_method() -> dict:
     except Exception as err:
         return f'Error. Data not loaded in\n', 404
 
+def m_cases() -> int:
+    global rd0
+    try:
+        val_m = 0
+        for key in rd0.keys():
+            m_or_b = json.loads(rd0.get(key))['Diagnosis']
+            if m_or_b == 'M':
+                val_m += 1
+        return val_m
+    except Exception as err:
+        return f'Error. Data not loaded in\n', 404
 
+def b_cases() -> int:
+    global rd0
+    try:
+        val_b = 0
+        for key in rd0.keys():
+            m_or_b = json.loads(rd0.get(key))['Diagnosis']
+            if m_or_b == 'B':
+                val_b += 1
+        return val_b
+    except Exception as err:
+        return f'Error. Data not loaded in\n', 404
+    
 @app.route('/data', methods = ['POST', 'GET', 'DELETE'])
 def breast_cancer_data() -> dict:
     global rd0
@@ -73,10 +96,21 @@ def id_data(id_num: int) -> dict:
 
 @app.route('/outcome', methods = ['GET'])
 def get_cases() -> dict:
-    
-    cases = {"Malignant": {}, "Benign": {}}
-
-    return 'Working on it'
+    try:
+        m_list = []
+        b_list = []
+        for key in rd0.keys():
+            m_or_b = json.loads(rd0.get(key))['Diagnosis']
+            if m_or_b == 'M':
+                m_list.append(key)
+            elif m_or_b == 'B':
+                b_list.append(key)
+        val_m = m_cases()
+        val_b = b_cases()
+        cases = {"Malignant": {"Total cases": val_m, "IDs": m_list}, "Benign": {"Total cases": val_b, "IDs": b_list}}
+        return cases
+    except Exception as err:
+        return f'Error. Data not loaded in\n', 404
 
 
 @app.route('/image', methods = ['POST', 'GET', 'DELETE'])
@@ -85,46 +119,40 @@ def image():
     if request.method == 'POST':
         graph_data = {}
         if len(rd0.keys()) == 0:
-            return f'Data not loaded into database', 404
-        val_m = 0
-        val_b = 0
-        for key in rd.keys():
-            m_or_b = json.loads(rd0.get(key))['Diagnosis']
-            if m_or_b == 'M':
-                val_m += 1
-            elif m_or_b == 'B':
-                val_b += 1
+            return f'Data not loaded into database\n', 404
+        val_m = m_cases()
+        val_b = b_cases()
         graph_data = {'Malignant': val_m, 'Benign': val_b}
         diagnosis = list(graph_data.keys())
         num_diagnosis = list(graph_data.values())
         plt.bar(diagnosis, num_diagnosis, color = 'maroon', width = .4)
-        plt.xlabel("Diagnosis of Breast Cancer Cases")
-        plt.ylable("Number of Cases")
+        plt.xlabel("Prognosis")
+        plt.ylabel("Number of Cases")
         plt.title("Breast Cancer Cases Prognosis")
         plt.savefig('./cancer_prognosis.png')
         image_data = open('./cancer_prognosis.png', 'rb').read()
         rd1.set('image', image_data)
-        return f'Graph successfully saved'
+        return f'Graph successfully saved\n'
 
     elif request.method == 'GET':
         if len(rd0.keys()) == 0:
-            return f'Data not loaded into database', 404
+            return f'Data not loaded into database\n', 404
         try:
             image_data = rd1.get('image')
             if image_data is None:
-                return f'Error. No image found', 404
-            with open('./cancer_prognosis.png', 'wb') as file:
-                file.write(image_data)
+                return f'Error. No image found\n', 404
+            with open('./cancer_prognosis.png', 'wb') as image_file:
+                image_file.write(image_data)
             return send_file('./cancer_prognosis.png', mimetype = 'image/png', as_attachment = True)
         except Exception as err:
-            return f'Error. Unable to fetch image', 404
+            return f'Error. Unable to fetch image\n', 404
 
     elif request.method == 'DELETE':
         try:
             rd1.flushdb()
-            return f'Image deleted'
+            return f'Image deleted\n'
         except Exception as err:
-            return f'Unable to delete image', 404
+            return f'Unable to delete image\n', 404
 
     else:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
