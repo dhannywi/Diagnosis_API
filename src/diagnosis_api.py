@@ -9,9 +9,8 @@ import yaml
 
 app = Flask(__name__)
 
-#redis_ip = os.environ.get('REDIS_IP')
-#if not redis_ip:
-#    raise Exception()
+
+#remove the two lines below b/c included in jobs.py
 rd0 = redis.Redis(host='redis-db', port=6379, db=0, decode_responses=True)
 rd1 = redis.Redis(host='redis-db', port=6379, db=1)
 
@@ -217,6 +216,15 @@ def image() -> str:
     else:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
 
+
+@app.route('/jobs', methods['POST', 'GET'])
+def api_jobs():
+    if request.method == 'POST':
+        try:
+            job = request.get_json(force=True)
+        except Exception as err:
+            
+    
 
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
