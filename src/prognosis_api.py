@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import os
 import yaml
 
+test_var = 0
 app = Flask(__name__)
 
 #redis_ip = os.environ.get('REDIS_IP')
