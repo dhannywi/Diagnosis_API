@@ -19,13 +19,11 @@ rd1 = redis.Redis(host='redis-db', port=6379, db=1)
 def get_method() -> dict:
     """
     Outputs the all data retrieved from the Redis database.
-
     Args:
         none
     Returns:
         data (dict): dictionary with all data from breast cancer database
     """
-    global rd0
     try:
         if len(rd0.keys()) == 0:
             return f'Error. Breast cancer data not loaded in\n', 404
@@ -39,13 +37,11 @@ def get_method() -> dict:
 def m_cases() -> int:
     """
     Returns number of malignant cases in the breast cancer database.
-
     Args:
         none
     Returns:
         val_m (int): number of malignant cases
     """
-    global rd0
     try:
         val_m = 0
         for key in rd0.keys():
@@ -59,13 +55,11 @@ def m_cases() -> int:
 def b_cases() -> int:
     """
     Returns number of benign cases in the breast cancer database.
-
     Args:
         none
     Returns:
         val_m (int): number of malignant cases
     """
-    global rd0
     try:
         val_b = 0
         for key in rd0.keys():
@@ -80,14 +74,12 @@ def b_cases() -> int:
 def breast_cancer_data() -> str:
     """
     Handles all available methods of 'POST', 'GET', and 'DELETE' that can be requested by the user to load, return, or delete the breast cancer data from the database. 
-
     Args:
         none
     Returns:
         (str): status info whether 'POST' or 'DELETE' method was executed
         data (dict): dictionary of the breast cancer data  
     """
-    global rd0
     if request.method == 'POST':
         try:
             r = requests.get(url='https://raw.githubusercontent.com/dhannywi/Prognosis_API/main/wdbc.data.csv')
@@ -115,7 +107,6 @@ def breast_cancer_data() -> str:
 def cancer_case_id() -> list:
     """
     Returns all ID numbers representing each case within the breast cancer data.
-
     Args:
         none
     Returns:
@@ -130,7 +121,6 @@ def cancer_case_id() -> list:
 def id_data(id_num: int) -> dict:
     """
     Outputs data associated with <id_num> case within the breast cancer data. 
-
     Args:
         id_num (int): ID number value
     Returns:
@@ -149,13 +139,11 @@ def id_data(id_num: int) -> dict:
 def get_cases() -> dict:
     """
     Returns ID numbers and total number of cases associated with diagnosis of malignant or benign.
-
     Args:
         none
     Returns:
         cases (dict): ID numbers and total number of malignant and benign cases
     """
-    global r0
     if len(rd0.keys()) == 0:
         return f'Error. Breast cancer data not loaded in\n', 404
     try:
@@ -232,10 +220,28 @@ def image() -> str:
 
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
-    return '''\n Usage: curl 'localhost:5000[OPTIONS]'\n
-    Options:\n
-    1. /data
     '''
+    Function returns help text (as a string) that briefly describes each route.
+    Args:
+        None
+    Returns:
+        help_str (str):  Help text that briefly describes each route
+    '''
+    help_str = '''
+    Usage: curl [host_name]:5000[ROUTE]
+    A Flask REST API for querying and returning interesting information from the breast cancer prognosis dataset.
+    Route                           Method  What it returns
+    /data                           POST    Put data into Redis database
+    /data                           GET     Return entire data set from Redis database
+    /data                           DELETE  Delete data in Redis database
+    /id                             GET     Return json-formatted list of all "ID Number"
+    /id/<id_num>                    GET     Return all data associated with <id_num>
+    /image                  	    POST    Creates a plot and saves it to Redis
+    /outcome	                    GET	    Return a dictionary containing information regarding malignant and benign cases
+    /help                           GET     Return help text that briefly describes each route
+    \n'''
+    return help_str
+
 
     
 if __name__ == '__main__':
