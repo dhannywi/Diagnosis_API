@@ -120,7 +120,6 @@ def cancer_case_id() -> list:
         none
     Returns:
         rd0.keys() (list): list of all ID numbers of the data  
-
     """
     if len(rd0.keys()) == 0:
         return f'Error. Breast cancer data not loaded in\n', 404
