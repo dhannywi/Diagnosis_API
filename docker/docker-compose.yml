@@ -27,8 +27,8 @@ services:
         build:
             context: ../ 
             dockerfile: ./docker/Dockerfile.wrk
-      # container_name: wallen-wrk
         environment:
             - REDIS_IP=redis-db
         depends_on:
             - redis-db
+        image: pranjaladhikari/diagnosis_wrk:1.0
