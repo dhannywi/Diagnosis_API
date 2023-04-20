@@ -2,11 +2,11 @@
 
 ![Research](https://www.houstonmethodist.org/-/media/images/research/cancer-center/cancer_center_banner_1140x400.ashx?h=400&iar=0&mw=1382&w=1140&hash=28362AFB38ACA244FB16263E4AA3E267)
 <h1><img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
- Prognosis API 
+ Diagnosis API 
 <img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
 </h1>
 
-REST API to query data on Breast Cancer Prognosis.  
+REST API to query data on Breast Cancer Diagnosis.  
 </div>
 
 #
@@ -74,6 +74,15 @@ Prognosis_API/
 You have the option to build this project from source, or use the provided Docker container on DockerHub. A Docker installation is required, as we build and run a Docker image.
 
 We describe below the installation process using terminal commands, which are expected to run on a Ubuntu 20.04.5 machine with Python3. Installation may differ for other systems.
+
+
+#### Option 1: Automate deployment using `docker-compose`
+The quickest way to get your services up and running is to use `docker-compose` to automate deployment.
+* Create a `data` folder inside the `Diagnosis_API/docker/` directory, execute `mkdir data`. This allows redis to store data in the disk so that the data persist, even when the services are killed.
+* Go back to the root `Diagnosis_API` directory and execute `docker-compose -f docker/docker-compose.yml up --build` Your images are built and services are up and running when you see the message:
+```console
+```
+
 
 <details>
 <summary><h3>Customization for Developers</h3></summary>

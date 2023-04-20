@@ -9,16 +9,26 @@ services:
         volumes:
             - ./data:/data
         user: "1000:1000"
+        command: ["--save", "1", "1"]
     flask-app:
         build:
-            context: ./
-            dockerfile: ./Dockerfile
+            context: ../
+            dockerfile: ./docker/Dockerfile.api
         depends_on:
             - redis-db
         environment:
             - REDIS_IP=redis-db
-        image: # change to image name
+        image: pranjaladhikari/diagnosis_app:1.0
         ports:
             - 5000:5000
         volumes:
             - ./config.yaml:/config.yaml
+    flask-wrk:
+        build:
+            context: ../ 
+            dockerfile: ./docker/Dockerfile.wrk
+        environment:
+            - REDIS_IP=redis-db
+        depends_on:
+            - redis-db
+        image: pranjaladhikari/diagnosis_wrk:1.0
