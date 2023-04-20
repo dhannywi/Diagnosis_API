@@ -2,7 +2,7 @@
 
 ![Research](https://www.houstonmethodist.org/-/media/images/research/cancer-center/cancer_center_banner_1140x400.ashx?h=400&iar=0&mw=1382&w=1140&hash=28362AFB38ACA244FB16263E4AA3E267)
 <h1><img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
- Prognosis API 
+ Diagnosis API 
 <img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
 </h1>
 
