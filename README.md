@@ -142,3 +142,4 @@ Since we need to keep the server running in order to make requests, open an addi
 ## Authors
 * Dhanny Indrakusuma
 * Pranjal Adhikari
+* Amanda Lee
