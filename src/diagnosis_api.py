@@ -14,7 +14,6 @@ app = Flask(__name__)
 rd0 = redis.Redis(host='redis-db', port=6379, db=0, decode_responses=True)
 rd1 = redis.Redis(host='redis-db', port=6379, db=1)
 
-
 def get_method() -> dict:
     """
     Outputs the all data retrieved from the Redis database.
@@ -133,7 +132,6 @@ def id_data(id_num: int) -> dict:
     except Exception as err:
         return f'Error. ID {id_num} not found in database\n', 404
 
-
 @app.route('/outcome', methods = ['GET'])
 def get_cases() -> dict:
     """
@@ -160,7 +158,6 @@ def get_cases() -> dict:
         return cases
     except Exception as err:
         return f'Error. Breast cancer data not loaded in\n', 404
-
 
 @app.route('/image', methods = ['POST', 'GET', 'DELETE'])
 def image() -> str:
@@ -216,16 +213,13 @@ def image() -> str:
     else:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
 
-
 @app.route('/jobs', methods['POST', 'GET'])
 def api_jobs():
     if request.method == 'POST':
         try:
             job = request.get_json(force=True)
         except Exception as err:
-            
-    
-
+                
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
     '''
@@ -250,7 +244,5 @@ def all_routes() -> str:
     \n'''
     return help_str
 
-
-    
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0')
