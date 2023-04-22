@@ -1,0 +1,12 @@
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+    name: dwi67-test-nodeport-service
+spec:
+    type: NodePort
+    selector:
+        app: dwi67-test-app
+    ports:
+        - port: 5000
+          targetPort: 5000
