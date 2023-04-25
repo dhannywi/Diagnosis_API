@@ -132,8 +132,86 @@ Below are the routes for you to request data from:
 ### Querying data using the REST API
 Since we need to keep the server running in order to make requests, open an additional shell and change your directory to the same directory your server is running. The data has been automatically loaded and you can start querying. Keep in mind that if you accidentally queried using the `DELETE` method, you will need to query using the `POST` method first in order to re-load the dataset into the database. Otherwise, when data has not been loaded/ has been deleted, you will receive an error message. For example:
 ```console
-
+user:$ curl localhost:5000/data
+Error. Breast cancer data not loaded in
 ```
+
+```console
+user:$ curl localhost:5000/data -X POST
+Data loaded in
+```
+
+```console
+user:$ curl localhost:5000/data
+[...,
+  {
+    "Area SE": "156.8",
+    "Compactness SE": "0.0496",
+    "Concave Points SE": "0.01561",
+    "Concavity SE": "0.06329",
+    "Diagnosis": "M",
+    "Fractal Dimension SE": "0.004614",
+    "ID Number": "8910988",
+    "Mean Area": "1491",
+    "Mean Compactness": "0.1961",
+    "Mean Concave Points": "0.1088",
+    "Mean Concavity": "0.2195",
+    "Mean Fractal Dimension": "0.06194",
+    "Mean Perimeter": "147.3",
+    "Mean Radius": "21.75",
+    "Mean Smoothness": "0.09401",
+    "Mean Symmetry": "0.1721",
+    "Mean Texture": "20.99",
+    "Perimeter SE": "8.867",
+    "Radius SE": "1.167",
+    "Smoothness SE": "0.005687",
+    "Symmetry SE": "0.01924",
+    "Texture SE": "1.352",
+    "Worst Area": "2384",
+    "Worst Compactness": "0.4725",
+    "Worst Concave Points": "0.1841",
+    "Worst Concavity": "0.5807",
+    "Worst Fractal Dimension": "0.08858",
+    "Worst Perimeter": "195.9",
+    "Worst Radius": "28.19",
+    "Worst Smoothness": "0.1272",
+    "Worst Symmetry": "0.2833",
+    "Worst Texture": "28.18"
+  }
+]
+```
+
+```console
+user:$ curl localhost:5000/data -X DELETE
+Data deleted
+```
+
+
+### Jobs
+Creating Jobs
+```console
+user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: applicati
+on/json"
+{
+  "id": "9905ff66-c92b-4e01-a455-a847af81b31d",
+  "status": "submitted",
+  "start": 6,
+  "end": 12
+}
+```
+
+Check job progress
+```console
+user:$ curl localhost:5000/jobs/9905ff66-c92b-4e01-a455-a847af81b31d
+{
+  "id": "9905ff66-c92b-4e01-a455-a847af81b31d",
+  "status": "in progress",
+  "start": "6",
+  "end": "12"
+}
+```
+
+
 
 ## Additional Resources
 * [University of Wisconsin-Madison Research](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html)
