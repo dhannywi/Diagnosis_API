@@ -26,5 +26,5 @@ spec:
           image: 
           imagePullPolicy: Always
           env:
-          - name: redis
+          - name: REDIS_IP
             value: dwi67-test-redis-service
