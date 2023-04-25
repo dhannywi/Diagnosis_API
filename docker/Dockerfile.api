@@ -9,5 +9,6 @@ RUN pip install hotqueue==0.2.8
 RUN pip install matplotlib==3.7.1
 
 COPY ./src/diagnosis_api.py /diagnosis_api.py
+COPY ./src/jobs.py /jobs.py
 
 CMD ["python", "diagnosis_api.py"]
