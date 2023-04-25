@@ -243,7 +243,7 @@ def get_job_status(job_uuid):
 def download(job_uuid):
     try:
         if img_db.exists('job.'+jobid) and b'image' in img_db.hgetall('job.'+jobid):
-        file_path = './{jobid}.png'
+            file_path = './{jobid}.png'
         with open(file_path, 'wb') as f:
             f.write(img_db.hget('job.'+jobid, b'image'))
         return send_file(file_path, mimetype='image/png', as_attachment=True)
