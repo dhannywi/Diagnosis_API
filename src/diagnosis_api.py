@@ -11,10 +11,6 @@ from jobs import rd0, img_rd, q, add_job, get_job_by_id
 app = Flask(__name__)
 
 
-#remove the two lines below b/c included in jobs.py
-#rd0 = redis.Redis(host='redis-db', port=6379, db=0, decode_responses=True)
-#rd1 = redis.Redis(host='redis-db', port=6379, db=1)
-
 def get_method() -> dict:
     """
     Outputs the all data retrieved from the Redis database.
@@ -215,18 +211,45 @@ def image() -> str:
     else:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
 
-@app.route('/jobs', methods = ['POST', 'GET'])
+
+@app.route('/jobs', methods = ['POST'])
 def api_jobs():
     if request.method == 'POST':
         try:
             job = request.get_json(force=True)
+            if len(rd0.keys()) == 0:
+                return 'Error. Breast cancer data not loaded in\n', 404
         except Exception as e:
             return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.'.format(e)})
     
         return json.dumps(add_job(job['start'], job['end']), indent=2) + '\n'
     else:
         return f'No available method selected. Method available: POST', 404
-                
+
+
+@app.route('/jobs/<job_uuid>', methods = ['GET'])
+def get_job_status(job_uuid):
+    '''
+    Checks the status of a submitted job.
+    Args:
+        job_uuid (int): job uuid number
+    Returns:
+
+    '''
+    return json.dumps(get_job_by_id(job_uuid), indent=2) + '\n'
+
+
+@app.route('/download/<job_uuid>', methods = ['GET'])
+def download(job_uuid):
+    try:
+        if img_db.exists('job.'+jobid) and b'image' in img_db.hgetall('job.'+jobid):
+        file_path = './{jobid}.png'
+        with open(file_path, 'wb') as f:
+            f.write(img_db.hget('job.'+jobid, b'image'))
+        return send_file(file_path, mimetype='image/png', as_attachment=True)
+    except Exception as err:
+        return f'Error. Invalid job id', 404
+    
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
     '''
