@@ -3,16 +3,17 @@ from hotqueue import HotQueue
 import redis
 import os
 import json
-from flask import Flask, request
+#from flask import Flask, request
 
-redis_ip = os.environ.get('REDIS_IP', '172.17.0.1')
+
+redis_ip = os.environ.get('REDIS_IP')
 if not redis_ip:
     raise Exception()
 
 q = HotQueue("queue", host=redis_ip, port=6379, db=2)
 rd0 = redis.Redis(host=redis_ip, port=6379, db=0, decode_responses=True) 
-rd1 = redis.Redis(host=redis_ip, port=6379, db=1)
-rd2 = redis.Redis(host=redis_ip, port=6379, db=2)
+jdb = redis.Redis(host=redis_ip, port=6379, db=1)
+img_rd = redis.Redis(host=redis_ip, port=6379, db=3)
 
 def _generate_jid():
     """
@@ -48,7 +49,7 @@ def _save_job(job_key, job_dict):
     """
     Save a job object in the Redis database.
     """
-    rd1.hset(job_key, mapping=job_dict)
+    jdb.hset(job_key, mapping=job_dict)
     return
 
 def _queue_job(jid):
@@ -72,7 +73,7 @@ def get_job_by_id(jid):
     """
     Return job dictionary given jid.
     """
-    return (rd1.hgetall(_generate_job_key(jid).encode('utf-8')))
+    return (jdb.hgetall(_generate_job_key(jid).encode('utf-8')))
 
 def update_job_status(jid, status):
     """

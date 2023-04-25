@@ -6,13 +6,14 @@ import csv
 import matplotlib.pyplot as plt
 import os
 import yaml
+from jobs import rd0, img_rd, q, add_job, get_job_by_id
 
 app = Flask(__name__)
 
 
 #remove the two lines below b/c included in jobs.py
-rd0 = redis.Redis(host='redis-db', port=6379, db=0, decode_responses=True)
-rd1 = redis.Redis(host='redis-db', port=6379, db=1)
+#rd0 = redis.Redis(host='redis-db', port=6379, db=0, decode_responses=True)
+#rd1 = redis.Redis(host='redis-db', port=6379, db=1)
 
 def get_method() -> dict:
     """
@@ -159,6 +160,7 @@ def get_cases() -> dict:
     except Exception as err:
         return f'Error. Breast cancer data not loaded in\n', 404
 
+    
 @app.route('/image', methods = ['POST', 'GET', 'DELETE'])
 def image() -> str:
     """
@@ -170,7 +172,7 @@ def image() -> str:
         (str): status info whether 'POST' or 'DELETE' method was executed
         image (png): image of the graph created utilizing the breast cancer data  
     """
-    global rd0, rd1
+    global rd0, img_db
     if request.method == 'POST':
         graph_data = {}
         if len(rd0.keys()) == 0:
@@ -186,12 +188,12 @@ def image() -> str:
         plt.title("Breast Cancer Cases Diagnosis")
         plt.savefig('./cancer_prognosis.png')
         image_data = open('./cancer_prognosis.png', 'rb').read()
-        rd1.set('image', image_data)
+        img_db.set('image', image_data)
         return f'Graph successfully saved\n'
     elif request.method == 'GET':
         if len(rd0.keys()) == 0:
             return f'Error. Breast cancer data not loaded in\n', 404
-        elif len(rd1.keys()) == 0:
+        elif len(img_db.keys()) == 0:
             return f'Error. Image not loaded in\n', 404
         try:
             image_data = rd1.get('image')
@@ -204,21 +206,26 @@ def image() -> str:
             return f'Error. Unable to fetch image\n', 404
     elif request.method == 'DELETE':
         try:
-            if len(rd1.keys()) == 0:
+            if len(img_db.keys()) == 0:
                 return f'Error. Image not loaded in', 404
-            rd1.flushdb()
+            img_db.flushdb()
             return f'Image deleted\n'
         except Exception as err:
             return f'Error. Unable to delete image\n', 404
     else:
         return f'No available method selected. Methods available: POST, GET, DELETE\n', 404
 
-@app.route('/jobs', methods['POST', 'GET'])
+@app.route('/jobs', methods = ['POST', 'GET'])
 def api_jobs():
     if request.method == 'POST':
         try:
             job = request.get_json(force=True)
-        except Exception as err:
+        except Exception as e:
+            return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.'.format(e)})
+    
+        return json.dumps(add_job(job['start'], job['end']), indent=2) + '\n'
+    else:
+        return f'No available method selected. Method available: POST', 404
                 
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
