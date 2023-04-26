@@ -241,6 +241,18 @@ def get_job_status(job_uuid):
 
 @app.route('/download/<job_uuid>', methods = ['GET'])
 def download(job_uuid):
+    ''' dhanny's code
+    if len(rd.keys()) == 0:
+        return 'No data in db.\n'
+    elif b'plot_image' not in img_db.keys():
+        return 'Plot not in db, pls check if job is complete.\n'
+    # get plot image from db
+    path = './cancer_diagnosis.png'
+    with open(path, 'wb') as f:
+        f.write(img_db.get('plot_image'))
+    return send_file(path, mimetype='image/png', as_attachment=True)
+    '''
+
     try:
         if img_db.exists('job.'+jobid) and b'image' in img_db.hgetall('job.'+jobid):
             file_path = './{jobid}.png'
@@ -249,7 +261,7 @@ def download(job_uuid):
         return send_file(file_path, mimetype='image/png', as_attachment=True)
     except Exception as err:
         return f'Error. Invalid job id', 404
-    
+
 @app.route('/help', methods = ['GET'])
 def all_routes() -> str:
     '''

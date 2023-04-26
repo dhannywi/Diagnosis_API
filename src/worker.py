@@ -22,7 +22,7 @@ def execute_job(jid):
                 diagnosis = json.loads(rd0.get(key))['Diagnosis']
                 if diagnosis == 'M':
                     graph_data['Malignant'] += 1
-                elif d == 'B':
+                elif diagnosis == 'B':
                     graph_data['Benign'] += 1
 
         x = [i for i in graph_data.keys()]
@@ -33,11 +33,12 @@ def execute_job(jid):
         plt.title("Breast Cancer Cases Diagnosis")
 
         plt.savefig('./cancer_diagnosis.png')
-        plt.clf()
+        
         image_file = open('./cancer_diagnosis.png', 'rb').read()
         img_rd.set('plot_image', image_file)
         update_image_job(jid, image_file)
-    update_job_status(jid, 'complete')
+        
+        time.sleep(2)
+        update_job_status(jid, 'complete')
 
-if __name__ == '__main__':
-    execute_job()
+execute_job()
