@@ -18,7 +18,7 @@ services:
             - redis-db
         environment:
             - REDIS_IP=redis-db
-        image: pranjaladhikari/diagnosis_app:1.0
+        image: dhannywi/diagnosis_app:1.0
         ports:
             - 5000:5000
         volumes:
@@ -31,4 +31,4 @@ services:
             - REDIS_IP=redis-db
         depends_on:
             - redis-db
-        image: pranjaladhikari/diagnosis_wrk:1.0
+        image: dhannywi/diagnosis_wrk:1.0
