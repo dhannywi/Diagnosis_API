@@ -183,20 +183,17 @@ Below are the routes for you to request data from:
 | 11. | `/download/<job_id>` | GET | Returns the plot associated with <job_id> |
 | 10. | `/help` | GET | Return help text (string) that briefly describes each route |
 
-### Querying data using the REST API
-Since we need to keep the server running in order to make requests, open an additional shell and change your directory to the same directory your server is running. The data has been automatically loaded and you can start querying. Keep in mind that if you accidentally queried using the `DELETE` method, you will need to query using the `POST` method first in order to re-load the dataset into the database. Otherwise, when data has not been loaded/ has been deleted, you will receive an error message. For example:
+### Querying Data Using the REST API
+Since we need to keep the server running in order to make requests, open an additional shell and change your directory to the same directory your server is running. The data has been automatically loaded and you can start querying. Keep in mind that if you accidentally queried using the `DELETE` method, you will need to query using the `POST` method first in order to re-load the dataset into the database. Otherwise, when data has not been loaded/has been deleted, you will receive the following error message:
 ```console
 user:$ curl localhost:5000/data
 Error. Breast cancer data not loaded in
 ```
 
-```console
-user:$ curl localhost:5000/data -X POST
-Data loaded in
-```
+### Example Outputs
 
+#### > `user:$ curl localhost:5000/data`
 ```console
-user:$ curl localhost:5000/data
 [...,
   {
     "Area SE": "156.8",
