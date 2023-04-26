@@ -56,17 +56,22 @@ Prognosis_API/
 │   ├── Dockerfile.wrk
 │   └── docker-compose.yml
 ├── kubernetes/
-│   ├── 
-│   ├── 
-│   ├── 
-│   ├── 
-│   ├── 
-│   └── 
+│   ├── deployment-python-debug.yml
+│   └── prod
+│       ├── app-prod-api-deployment.yml
+│       ├── app-prod-api-ingress.yml
+│       ├── app-prod-api-nodeport.yml
+│       ├── app-prod-api-service.yml
+│       ├── app-prod-db-deployment.yml
+│       ├── app-prod-db-pvc.yml
+│       ├── app-prod-db-service.yml
+│       └── app-prod-wrk-deployment.yml
 ├── README.md
-└── src/
-    ├── prognosis_api.py
-    ├── jobs.py
-    └── worker.py
+├── src/
+│   ├── prognosis_api.py
+│   ├── jobs.py
+│   └── worker.py
+└── wdbc.data.csv
 ```
 
 ## Installation
@@ -76,8 +81,15 @@ You have the option to build this project from source, or use the provided Docke
 We describe below the installation process using terminal commands, which are expected to run on a Ubuntu 20.04.5 machine with Python3. Installation may differ for other systems.
 
 
-#### Option 1: Automate deployment using `docker-compose`
-The quickest way to get your services up and running is to use `docker-compose` to automate deployment.
+### Automate deployment using `docker-compose`
+Since this is a Docker build, the requirements need not be installed, as it will automatically be done on the Docker image. All commands, unless otherwise noted, are to be run in a terminal.
+
+* First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
+* Next, install docker-compose: `sudo apt-get install docker-compose-plugin` or follow the instructions [here](https://docs.docker.com/compose/install/linux/). We are using **Docker Compose 1.25.0**
+* Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`
+* Then, change directory into the `Diagnosis_API` forder, execute `cd Diagnosis_API`
+
+**The quickest way to get your services up and running is to use `docker-compose` to automate deployment.**
 * Create a `data` folder inside the `Diagnosis_API/docker/` directory, execute `mkdir data`. This allows redis to store data in the disk so that the data persist, even when the services are killed.
 * Go back to the root `Diagnosis_API` directory and execute `docker-compose -f docker/docker-compose.yml up --build` Your images are built and services are up and running when you see the message:
 ```console
@@ -95,7 +107,8 @@ flask-app_1  |  * Restarting with stat
 flask-app_1  |  * Debugger is active!
 flask-app_1  |  * Debugger PIN: 622-922-706
 ```
-* Open a new terminal and execute `docker images` to check
+* In a new terminal, execute `docker ps -a`. You should see the containers running.
+* Execute `docker images` to check that the images are built
 ```console
 user:$ docker images
 REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
@@ -108,6 +121,18 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
     2. Then, push the two images by executing `docker push dhannywi/diagnosis_wrk:1.0` and `docker push dhannywi/diagnosis_app:1.0`
     3. Check your docker hub page to see if the images are there. If you encounter `denied: requested access to the resource is denied` error while pushing the images, follow the instructions [here](https://jhooq.com/requested-access-to-resource-is-denied/#2-step-1---lets-do-the-docker-logout-first)
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down`
+
+## Kubernetes Deployment
+To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access - Execute this commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
+* `kubectl apply -f dwi67-test-redis-service.yml`
+* `kubectl apply -f dwi67-test-pvc.yml`
+* `dwi67-test-redis-deployment.yml`
+* `kubectl apply -f dwi67-test-flask-service.yml`
+* `kubectl apply -f dwi67-test-flask-deployment.yml`
+
+
+* `kubectl apply -f dwi67-test-python-debug.yml`
+
 
 <details>
 <summary><h3>Customization for Developers</h3></summary>
