@@ -24,7 +24,7 @@ spec:
       containers:
         - name: dwi67-test-flask
           imagePullPolicy: Always
-          image: pranjaladhikari/diagnosis_app:1.0
+          image: dhannywi/diagnosis_app:1.0
           env:
           - name: FLASK_APP
             value: "diagnosis_api.py"

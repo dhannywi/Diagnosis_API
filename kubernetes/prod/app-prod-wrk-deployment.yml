@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: dwi67-test-wrk
-          image: pranjaladhikari/diagnosis_wrk:1.0
+          image: dhannywi/diagnosis_wrk:1.0
           imagePullPolicy: Always
           env:
           - name: REDIS_IP
