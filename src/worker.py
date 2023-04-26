@@ -34,11 +34,13 @@ def execute_job(jid):
 
         plt.savefig('./cancer_diagnosis.png')
         
-        image_file = open('./cancer_diagnosis.png', 'rb').read()
-        img_rd.set('plot_image', image_file)
-        update_image_job(jid, image_file)
-        
-        time.sleep(2)
+        with open('./cancer_diagnosis.png', 'rb') as f:
+            img = f.read()
+        img_rd.hset(jid, 'image', img)
+        update_image_job(jid, img)
         update_job_status(jid, 'complete')
 
+        
+
+        
 execute_job()
