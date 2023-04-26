@@ -82,7 +82,6 @@ def breast_cancer_data() -> str:
             r = requests.get(url='https://raw.githubusercontent.com/dhannywi/Prognosis_API/main/wdbc.data.csv')
             csv_data = r.content.decode('utf-8')
             csv_reader = csv.DictReader(csv_data.splitlines())
-            data = {}
             for row in csv_reader:
                 id_num = row.get('ID Number')
                 rd0.set(id_num, json.dumps(row))
@@ -143,23 +142,55 @@ def get_cases() -> dict:
     """
     if len(rd0.keys()) == 0:
         return f'Error. Breast cancer data not loaded in\n', 404
-    try:
-        m_list = []
-        b_list = []
-        for key in rd0.keys():
-            m_or_b = json.loads(rd0.get(key))['Diagnosis']
-            if m_or_b == 'M':
-                m_list.append(key)
-            elif m_or_b == 'B':
-                b_list.append(key)
-        val_m = m_cases()
-        val_b = b_cases()
-        cases = {"Malignant": {"Total cases": val_m, "IDs": m_list}, "Benign": {"Total cases": val_b, "IDs": b_list}}
-        return cases
-    except Exception as err:
-        return f'Error. Breast cancer data not loaded in\n', 404
-
     
+    m_list = []
+    b_list = []
+    for key in rd0.keys():
+        m_or_b = json.loads(rd0.get(key))['Diagnosis']
+        if m_or_b == 'M':
+            m_list.append(key)
+        elif m_or_b == 'B':
+            b_list.append(key)
+    val_m = m_cases()
+    val_b = b_cases()
+    cases = {"Malignant": {"Total cases": val_m, "IDs": m_list}, "Benign": {"Total cases": val_b, "IDs": b_list}}
+    return cases
+
+@app.route('/diagnosis-mean-radius', methods = ['GET'])
+def get_details() -> dict:
+    '''
+    Returns information on mean radius max, min and avg, based on diagnosis
+    Args:
+        None
+    Returns:
+        data_dict (dict): Nested dictionary containing mean radius information based on diagnosis
+    '''
+    if len(rd0.keys()) == 0:
+        return f'Error. Breast cancer data not loaded in\n', 404
+    
+    data_dict = {'Malignant': {'cases': 0, 'mean_radius': {} }, 'Benign': {'cases': 0, 'mean_radius': {} } }
+    mean_rad_M = []
+    mean_rad_B = []
+    for key in rd0.keys():
+        diagnosis = json.loads(rd0.get(key))['Diagnosis']
+        if diagnosis == 'M':
+            data_dict['Malignant']['cases'] += 1
+            mean_rad_M.append(float(json.loads(rd0.get(key))['Mean Radius']))
+        elif diagnosis == 'B':
+            data_dict['Benign']['cases'] += 1
+            mean_rad_B.append(float(json.loads(rd0.get(key))['Mean Radius']))
+
+    data_dict['Malignant']['mean_radius']['max'] = max(mean_rad_M)
+    data_dict['Malignant']['mean_radius']['min'] = min(mean_rad_M)
+    data_dict['Malignant']['mean_radius']['avg'] = round(sum(mean_rad_M)/len(mean_rad_M), 2)
+
+    data_dict['Benign']['mean_radius']['max'] = max(mean_rad_B)
+    data_dict['Benign']['mean_radius']['min'] = min(mean_rad_B)
+    data_dict['Benign']['mean_radius']['avg'] = round(sum(mean_rad_B)/len(mean_rad_B), 2)
+    return data_dict
+
+
+
 @app.route('/image', methods = ['POST', 'GET', 'DELETE'])
 def image() -> str:
     """
@@ -284,7 +315,8 @@ def all_routes() -> str:
     /data                           DELETE  Delete data in Redis database
     /id                             GET     Return json-formatted list of all "ID Number"
     /id/<id_num>                    GET     Return all data associated with <id_num>
-    /outcome	                    GET	    Return a dictionary containing information regarding malignant and benign cases
+    /outcome	                    GET	    Return a dictionary with information on malignant and benign cases with associated ID Numbers
+    /diagnosis-mean-radius          GET     Return a dictionary with Mean Radius information based on diagnosis
     /image                  	    POST    Creates a plot and saves it to Redis
     /image                  	    GET     Returns the plot created
     /image                  	    DELETE  Delete the plot saved in Redis database

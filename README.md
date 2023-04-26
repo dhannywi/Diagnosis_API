@@ -81,8 +81,33 @@ The quickest way to get your services up and running is to use `docker-compose` 
 * Create a `data` folder inside the `Diagnosis_API/docker/` directory, execute `mkdir data`. This allows redis to store data in the disk so that the data persist, even when the services are killed.
 * Go back to the root `Diagnosis_API` directory and execute `docker-compose -f docker/docker-compose.yml up --build` Your images are built and services are up and running when you see the message:
 ```console
+$ docker-compose -f docker/docker-compose.yml up --build
+Creating network "docker_default" with the default driver
+Building flask-app
+Step 1/11 : FROM ubuntu
+ ---> 08d22c0ceb15
+...
+redis-db_1   | 1:M 26 Apr 2023 22:18:39.313 * DB loaded from disk: 0.004 seconds
+redis-db_1   | 1:M 26 Apr 2023 22:18:39.313 * Ready to accept connections
+...
+flask-app_1  | Press CTRL+C to quit
+flask-app_1  |  * Restarting with stat
+flask-app_1  |  * Debugger is active!
+flask-app_1  |  * Debugger PIN: 622-922-706
 ```
-
+* Open a new terminal and execute `docker images` to check
+```console
+user:$ docker images
+REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
+dhannywi/diagnosis_wrk   1.0       25da27e938ee   2 minutes ago   1.05GB
+dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
+```
+* Now you are ready to use the REST API locally using `curl localhost:5000/<route>`
+* If you want to enable public access for your API, you will need to push the images to docker hub, then deploy the kubernetes cluster.
+    1. First, you will need to login `docker login`
+    2. Then, push the two images by executing `docker push dhannywi/diagnosis_wrk:1.0` and `docker push dhannywi/diagnosis_app:1.0`
+    3. Check your docker hub page to see if the images are there. If you encounter `denied: requested access to the resource is denied` error while pushing the images, follow the instructions [here](https://jhooq.com/requested-access-to-resource-is-denied/#2-step-1---lets-do-the-docker-logout-first)
+* When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down`
 
 <details>
 <summary><h3>Customization for Developers</h3></summary>
