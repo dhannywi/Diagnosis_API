@@ -12,11 +12,11 @@ REST API to query data on Breast Cancer Diagnosis.
 #
 
 ## Data Description
-The Breast Cancer Wisconsin dataset includes data from hundreds of breast cancer cases to develop an effective prognosis for future cases. 
+The Breast Cancer Wisconsin dataset includes data from hundreds of breast cancer cases to develop an effective diagnosis for future cases. 
 For each case, the fine needle aspiration procedure was performed to take a sample from the cell nuclei present within the mass found on the body.
 
 From the sample, various measurements were taken, including the area, texture, smoothness, and compactness.
-Utilizing these measurements in the dataset, an effective and reliable prognosis can be made to determine the outcome of each case and to predict the survival status based on these features.
+Utilizing these measurements in the dataset, an effective and reliable diagnosis can be made to determine the outcome of each case and to predict the survival status based on these features.
 <br><br>
 <b>The dataset contains 32 attributes with information on:</b><br>
 1. ID number
@@ -50,7 +50,7 @@ The project uses **Python 3.8.10**, in particular **Flask 2.2.2** for REST API d
 ### Files
 The file structure of this project is as below:
 ```
-Prognosis_API/
+Diagnosis_API/
 ├── docker/
 │   ├── Dockerfile.api
 │   ├── Dockerfile.wrk
@@ -68,7 +68,7 @@ Prognosis_API/
 │       └── app-prod-wrk-deployment.yml
 ├── README.md
 ├── src/
-│   ├── prognosis_api.py
+│   ├── diagnosis_api.py
 │   ├── jobs.py
 │   └── worker.py
 └── wdbc.data.csv
@@ -173,10 +173,14 @@ Below are the routes for you to request data from:
 | 3. | `/data` | DELETE | Delete data in Redis |
 | 4. | `/id` | GET | Return json-formatted list of all "ID Number" |
 | 5. | `/id/<id_num>` | GET | Return all data associated with <id_num> |
-| 6. | `/image` | POST | Create plot and saves it to Redis |
-| 7. | `/image` | GET | Return plot image to the user, if present in the database |
-| 8. | `/image` | DELETE | Delete the plot image from the database |
-| 9. | `/outcome` | GET | Return a json dictionary containing information regarding malignant and benign cases |
+| 6. | `/outcome` | GET | Return a dictionary with information on malignant and benign cases with associated ID Numbers |
+| 7. | `/diagnosis-mean-radius` | GET | Return a dictionary with Mean Radius information based on diagnosis |
+| 8. | `/image` | POST | Create plot and saves it to Redis |
+| 9. | `/image` | GET | Return plot image to the user, if present in the database |
+| 10. | `/image` | DELETE | Delete the plot image from the database |
+| 11. | `/jobs` | POST | Submits job to worker for analysis of data |
+| 11. | `/jobs/<job_id>` | GET | Returns the status of the <job_id> |
+| 11. | `/download/<job_id>` | GET | Returns the plot associated with <job_id> |
 | 10. | `/help` | GET | Return help text (string) that briefly describes each route |
 
 ### Querying data using the REST API
@@ -240,8 +244,7 @@ Data deleted
 ### Jobs
 Creating Jobs
 ```console
-user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: applicati
-on/json"
+user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: application/json"
 {
   "id": "9905ff66-c92b-4e01-a455-a847af81b31d",
   "status": "submitted",
