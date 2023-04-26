@@ -1,4 +1,4 @@
-from jobs import update_image_job, update_job_status, q,rd0, jdb, img_rd
+from jobs import update_image_job, update_job_status, q, rd0, jdb, img_rd, get_job_start, get_job_end
 import time
 import matplotlib.pyplot as plt
 import redis
@@ -9,12 +9,12 @@ from hotqueue import HotQueue
 
 @q.worker
 def execute_job(jid):
-    update_job_status(jid, 'in progress')
     if len(rd0.keys()) == 0:
         return f'Error. Breast cancer data not loaded in\n', 404
     else:
-        start = float(jobs.get_job_start(jid))
-        end = float(jobs.get_job_end(jid))
+        update_job_status(jid, 'in progress')
+        start = float(get_job_start(jid))
+        end = float(get_job_end(jid))
         graph_data = {'Malignant': 0, 'Benign': 0}
         for key in rd0.keys():
             val = float(json.loads(rd0.get(key))['Mean Radius'])
