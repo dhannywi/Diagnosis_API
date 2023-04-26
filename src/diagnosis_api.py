@@ -8,6 +8,7 @@ import os
 import yaml
 from jobs import rd0, img_rd, q, add_job, get_job_by_id
 
+
 app = Flask(__name__)
 
 
@@ -64,6 +65,7 @@ def b_cases() -> int:
         return val_b
     except Exception as err:
         return f'Error. Breast cancer data not loaded in\n', 404
+
     
 @app.route('/data', methods = ['POST', 'GET', 'DELETE'])
 def breast_cancer_data() -> str:
@@ -129,6 +131,7 @@ def id_data(id_num: int) -> dict:
     except Exception as err:
         return f'Error. ID {id_num} not found in database\n', 404
 
+    
 @app.route('/outcome', methods = ['GET'])
 def get_cases() -> dict:
     """
@@ -161,7 +164,6 @@ def get_cases() -> dict:
 def image() -> str:
     """
     Handles all available methods of 'POST', 'GET', and 'DELETE' that can be requested by the user to load, return, or delete the graph image created utilizing the breast cancer data from the database. 
-    
     Args:
         none
     Returns:
@@ -227,7 +229,6 @@ def api_jobs():
             if len(rd0.keys()) == 0:
                 return 'Error. Breast cancer data not loaded in\n', 404
         except Exception as e:
-            #return f'Invalid entry. Enter request as: /jobs -X POST -d '{"start": <parameter>, "end": <parameter>}' -H "Content-Type: application/json"'
             return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.\n'.format(e)})
     
         return json.dumps(add_job(job['start'], job['end']), indent=2) + '\n'
@@ -276,18 +277,21 @@ def all_routes() -> str:
     """
     help_str = '''
     Usage: curl [host_name]:5000[ROUTE]
-    A Flask REST API for querying and returning interesting information from the breast cancer prognosis dataset.
+    A Flask REST API for querying and returning interesting information from the breast cancer diagnosis dataset.
     Route                           Method  What it returns
     /data                           POST    Put data into Redis database
     /data                           GET     Return entire data set from Redis database
     /data                           DELETE  Delete data in Redis database
     /id                             GET     Return json-formatted list of all "ID Number"
     /id/<id_num>                    GET     Return all data associated with <id_num>
-    /image                  	    POST    Creates a plot and saves it to Redis
     /outcome	                    GET	    Return a dictionary containing information regarding malignant and benign cases
+    /image                  	    POST    Creates a plot and saves it to Redis
+    /image                  	    GET     Returns the plot created
+    /image                  	    DELETE  Delete the plot saved in Redis database
+    /jobs                           POST    Submits job to worker for analysis of data
+    /jobs/<job_id>                  GET     Returns the status of the <job_id>
+    /download/<job_id>              GET     Returns the plot associated with <job_id>
     /help                           GET     Return help text that briefly describes each route
-    
-
 
     \n'''
     return help_str
