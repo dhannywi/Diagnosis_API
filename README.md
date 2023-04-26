@@ -87,11 +87,11 @@ Since this is a Docker build, the requirements need not be installed, as it will
 * First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
 * Next, install docker-compose: `sudo apt-get install docker-compose-plugin` or follow the instructions [here](https://docs.docker.com/compose/install/linux/). We are using **Docker Compose 1.25.0**
 * Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`
-* Then, change directory into the `Diagnosis_API` forder, execute `cd Diagnosis_API`
+* Then, navigate to the `Diagnosis_API` directory by executing the command `cd Diagnosis_API`
 
 **The quickest way to get your services up and running is to use `docker-compose` to automate deployment.**
-* Create a `data` folder inside the `Diagnosis_API/docker/` directory, execute `mkdir data`. This allows redis to store data in the disk so that the data persist, even when the services are killed.
-* Go back to the root `Diagnosis_API` directory and execute `docker-compose -f docker/docker-compose.yml up --build` Your images are built and services are up and running when you see the message:
+* Create a `data` folder inside the `Diagnosis_API/docker/` directory by executing the command `mkdir data`. This allows Redis to store data in the disk so that the data is persistent, even when the services are killed.
+* Go back to the root `Diagnosis_API` directory and execute the command `docker-compose -f docker/docker-compose.yml up --build`. Your images are built and services are up and running when you see the message:
 ```console
 $ docker-compose -f docker/docker-compose.yml up --build
 Creating network "docker_default" with the default driver
@@ -116,17 +116,17 @@ dhannywi/diagnosis_wrk   1.0       25da27e938ee   2 minutes ago   1.05GB
 dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
 ```
 * Now you are ready to use the REST API locally using `curl localhost:5000/<route>`
-* If you want to enable public access for your API, you will need to push the images to docker hub, then deploy the kubernetes cluster.
+* If you want to enable public access for your API, you will need to push the images to Docker Hub, then deploy the Kubernetes cluster.
     1. First, you will need to login `docker login`
     2. Then, push the two images by executing `docker push dhannywi/diagnosis_wrk:1.0` and `docker push dhannywi/diagnosis_app:1.0`
-    3. Check your docker hub page to see if the images are there. If you encounter `denied: requested access to the resource is denied` error while pushing the images, follow the instructions [here](https://jhooq.com/requested-access-to-resource-is-denied/#2-step-1---lets-do-the-docker-logout-first)
+    3. Check your Docker Hub page to see if the images are there. If you encounter `denied: requested access to the resource is denied` error while pushing the images, follow the instructions [here](https://jhooq.com/requested-access-to-resource-is-denied/#2-step-1---lets-do-the-docker-logout-first)
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down`
 
 ## Kubernetes Deployment
-To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access - Execute this commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
+To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Execute this commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
 * `kubectl apply -f dwi67-test-redis-service.yml`
 * `kubectl apply -f dwi67-test-pvc.yml`
-* `dwi67-test-redis-deployment.yml`
+* `kubectl apply -f dwi67-test-redis-deployment.yml`
 * `kubectl apply -f dwi67-test-flask-service.yml`
 * `kubectl apply -f dwi67-test-flask-deployment.yml`
 
@@ -137,9 +137,9 @@ To run this app on a Kubernetes cluster and eventually make the API publicly acc
 <details>
 <summary><h3>Customization for Developers</h3></summary>
 
-* Running commands above will automatically pull the image specified in the scripts from the docker hub.
-If you wish to use your own Flask API in the kubernetes cluster, you must change the name of image being pulled in `docker-compose.yml` and `flask-deployment.yml` to your preferred image on Docker Hub and then re-apply the kubernetes depolyment.
-* You may also want to change the **Environment variable** in your `docker-compose.yml` to reflect your redis service name. Example:
+* Running commands above will automatically pull the image specified in the scripts from the Docker Hub.
+If you wish to use your own Flask API in the Kubernetes cluster, you must change the name of image being pulled in `docker-compose.yml` and `flask-deployment.yml` to your preferred image on Docker Hub and then re-apply the Kubernetes depolyment.
+* You may also want to change the **Environment variable** in your `docker-compose.yml` to reflect your Redis service name. Example:
 ```console
 environment:
   - REDIS_IP=<redis-service-name>
