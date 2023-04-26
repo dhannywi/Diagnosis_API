@@ -227,8 +227,8 @@ def api_jobs():
             if len(rd0.keys()) == 0:
                 return 'Error. Breast cancer data not loaded in\n', 404
         except Exception as e:
-            return f'Invalid entry. Enter job as: /jobs -X POST -d '{"start": <parameter>, "end": <parameter>}' -H "Content-Type: application/json"'
-            #return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.\n'.format(e)})
+            #return f'Invalid entry. Enter request as: /jobs -X POST -d '{"start": <parameter>, "end": <parameter>}' -H "Content-Type: application/json"'
+            return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.\n'.format(e)})
     
         return json.dumps(add_job(job['start'], job['end']), indent=2) + '\n'
     else:
