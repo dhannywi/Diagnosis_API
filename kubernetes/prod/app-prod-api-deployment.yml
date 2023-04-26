@@ -24,10 +24,10 @@ spec:
       containers:
         - name: dwi67-test-flask
           imagePullPolicy: Always
-          image: dhannywi/gene-ius:kube
+          image: pranjaladhikari/diagnosis_app:1.0
           env:
           - name: FLASK_APP
-            value: "gene_api.py"
+            value: "diagnosis_api.py"
           - name: REDIS_IP
             value: dwi67-test-redis-service
           ports:
