@@ -15,6 +15,6 @@ spec:
           path: "/"
           backend:
             service:
-              name: dwi67-test-nodeport-service
+              name: dwi67-test-service-nodeport
               port:
                   number: 30398
