@@ -124,14 +124,22 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
 
 ## Kubernetes Deployment
 To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Execute this commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
-* `kubectl apply -f dwi67-test-redis-service.yml`
-* `kubectl apply -f dwi67-test-pvc.yml`
-* `kubectl apply -f dwi67-test-redis-deployment.yml`
-* `kubectl apply -f dwi67-test-flask-service.yml`
-* `kubectl apply -f dwi67-test-flask-deployment.yml`
-
-
-* `kubectl apply -f dwi67-test-python-debug.yml`
+* `kubectl apply -f app-prod-db-pvc.yml`
+* `kubectl apply -f app-prod-db-deployment.yml`
+* `kubectl apply -f app-prod-db-service.yml`
+* `kubectl apply -f app-prod-wrk-deployment.yml`
+* `kubectl apply -f app-prod-api-service.yml`
+* `kubectl apply -f app-prod-api-deployment.yml`
+* `kubectl apply -f app-prod-api-nodeport.yml`
+* Before applying the ingress, execute `kubectl get services` to get port number for ingress. The port number for ingress is the number can be found between the `5000:` and `/TCP` of the nodeport's PORT(S). In the example below, it's `30425`.
+```console
+user:$ kubectl get services
+NAME                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+dwi67-test-redis-service      ClusterIP   10.233.36.35    <none>        6379/TCP         2m32s
+dwi67-test-service-nodeport   NodePort    10.233.28.230   <none>        5000:30425/TCP   45s
+```
+* Now, you can start curling using `dwi67.coe332.tacc.cloud` instead of `localhost:5000`
+* Should you want to run a debug deployment to get back into, go back to `Diagnosis_API/kubernetes` folder and execute `kubectl apply -f dwi67-test-python-debug.yml`
 
 
 <details>
