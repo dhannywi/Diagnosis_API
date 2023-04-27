@@ -118,8 +118,9 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
 * Now you are ready to use the REST API locally using `curl localhost:5000/<route>`
 * If you want to enable public access for your API, you will need to push the images to Docker Hub, then deploy the Kubernetes cluster.
     1. First, you will need to login `docker login`
-    2. Then, push the two images by executing `docker push dhannywi/diagnosis_wrk:1.0` and `docker push dhannywi/diagnosis_app:1.0`
+    2. Then, push the two images by executing `docker push dhannywi/diagnosis_wrk:1.0` and `docker push dhannywi/diagnosis_app:1.0`. If you are building your own image, change `dhannywi` to your docker hub username.
     3. Check your Docker Hub page to see if the images are there. If you encounter `denied: requested access to the resource is denied` error while pushing the images, follow the instructions [here](https://jhooq.com/requested-access-to-resource-is-denied/#2-step-1---lets-do-the-docker-logout-first)
+    4. Note: If you are using your own image for kubernetes deployment, please see details in `Customization for Developers` prior to running kubernetes deployments.
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
 ## Option 2: Deployment using images from docker hub
@@ -132,6 +133,8 @@ Similar to option 1, you will need to have **Docker 20.10.12** installed to run 
 * Pull images from docker hub: `docker pull redis:7`, `docker pull dhannywi/diagnosis_wrk:1.0` and `docker pull dhannywi/diagnosis_app:1.0`.
 * Go to the root `Diagnosis_API` folder and execute `docker-compose -f docker/docker-compose.yml up` to get the images running and services connected.
 * Check if sevices are connected by executing `docker ps -a`
+* Now you are ready to use the REST API locally using curl localhost:5000/<route>
+* Follow the steps in Kubernetes deployment to enable public access, please note that if you are using different images from ones specified, see details in `Customization for Developers` prior to running kubernetes deployments.
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
 
