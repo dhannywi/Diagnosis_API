@@ -6,7 +6,7 @@
 <img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
 </h1>
 
-REST API to query data on Breast Cancer Diagnosis.  
+Docker containerized REST API to query data on Breast Cancer Diagnosis, with Redis NoSQL Database integration and public access deployment using Kubernetes.  
 </div>
 
 #
@@ -41,7 +41,7 @@ resulting in 30 features.  For instance, field 3 is Mean Radius, field
 
 All feature values are recoded with four significant digits, with no missing attribute values and class distribution of 357 benign and 212 malignant.
 
-The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)), and detailed documentation is available on [University of Wisconsin-Madison](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html) research page.
+The original dataset is available from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)), and detailed documentation is available on [University of Wisconsin-Madison](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html) research page.
 
 
 ## Implementation
@@ -81,7 +81,7 @@ You have the option to build this project from source, or use the provided Docke
 We describe below the installation process using terminal commands, which are expected to run on a Ubuntu 20.04.5 machine with Python3. Installation may differ for other systems.
 
 
-### Automate deployment using `docker-compose`
+### Option 1: Automate deployment using `docker-compose` from source
 Since this is a Docker build, the requirements need not be installed, as it will automatically be done on the Docker image. All commands, unless otherwise noted, are to be run in a terminal.
 
 * First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
@@ -120,17 +120,32 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
     1. First, you will need to login `docker login`
     2. Then, push the two images by executing `docker push dhannywi/diagnosis_wrk:1.0` and `docker push dhannywi/diagnosis_app:1.0`
     3. Check your Docker Hub page to see if the images are there. If you encounter `denied: requested access to the resource is denied` error while pushing the images, follow the instructions [here](https://jhooq.com/requested-access-to-resource-is-denied/#2-step-1---lets-do-the-docker-logout-first)
-* When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down`
+* When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
-## Kubernetes Deployment
-To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Execute this commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
-* `kubectl apply -f app-prod-db-pvc.yml`
-* `kubectl apply -f app-prod-db-deployment.yml`
-* `kubectl apply -f app-prod-db-service.yml`
-* `kubectl apply -f app-prod-wrk-deployment.yml`
-* `kubectl apply -f app-prod-api-service.yml`
-* `kubectl apply -f app-prod-api-deployment.yml`
-* `kubectl apply -f app-prod-api-nodeport.yml`
+## Option 2: Deployment using images from docker hub
+Similar to option 1, you will need to have **Docker 20.10.12** installed to run the commands. Howeve, we will be pulling existing images in the docker hub instead of building it from source.
+* First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
+* Next, install docker-compose: `sudo apt-get install docker-compose-plugin` or follow the instructions [here](https://docs.docker.com/compose/install/linux/). We are using **Docker Compose 1.25.0**
+* Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`
+* Then, navigate to the `Diagnosis_API` directory by executing the command `cd Diagnosis_API`
+* Create a `data` folder inside the `Diagnosis_API/docker/` directory by executing the command `mkdir data`. This allows Redis to store data in the disk so that the data is persistent, even when the services are killed.
+* Pull images from docker hub: `docker pull redis:7`, `docker pull dhannywi/diagnosis_wrk:1.0` and `docker pull dhannywi/diagnosis_app:1.0`.
+* Go to the root `Diagnosis_API` folder and execute `docker-compose -f docker/docker-compose.yml up` to get the images running and services connected.
+* Check if sevices are connected by executing `docker ps -a`
+* When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
+
+
+## Option 3: Kubernetes Deployment & enabling public access
+To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`, and execute these commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
+* `kubectl apply -f app-prod-db-pvc.yml` -- setting up the PVC to save the Redis data from the Flask app.
+* `kubectl apply -f app-prod-db-deployment.yml` -- creating a deployment for the Redis database so that the desired state for Redis is always met.
+* `kubectl apply -f app-prod-db-service.yml` -- starting the Redis service so that there is a persistent IP address that you can use to communicate to Redis.
+* `kubectl apply -f app-prod-wrk-deployment.yml` -- setting up the deployment for the worker on the Kubernetes cluster to help with analysis jobs.
+* `kubectl apply -f app-prod-api-service.yml` -- getting a persistent IP address for the Flask app with a service, which can be used to test the app prior to public deployment.
+* `kubectl apply -f app-prod-api-deployment.yml` -- setting up the deployment for the Flask app on the Kubernetes cluster.
+* **Testing prior to public deployment** Should you want to run a debug deployment to test your API before deployment, use this IP address from api service to run the tests execute `kubectl get services` and take note of the IP address for the flask service. Go back to `Diagnosis_API/kubernetes` folder and execute `kubectl apply -f dwi67-test-python-debug.yml`.
+* Execute `kubectl get deployments`. Note the python debug deployment name to access it, execute: `kubectl exec -it py-debug-deployment-f484b4b99-hk6pb -- /bin/bash`. When running curl commands, replace `127.0.0.1` or `localhost` with the IP address for your Flask service.
+* `kubectl apply -f app-prod-api-nodeport.yml` -- 
 * Before applying the ingress, execute `kubectl get services` to get port number for ingress. The port number for ingress is the number can be found between the `5000:` and `/TCP` of the nodeport's PORT(S). In the example below, it's `30425`.
 ```console
 user:$ kubectl get services
@@ -138,33 +153,40 @@ NAME                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S) 
 dwi67-test-redis-service      ClusterIP   10.233.36.35    <none>        6379/TCP         2m32s
 dwi67-test-service-nodeport   NodePort    10.233.28.230   <none>        5000:30425/TCP   45s
 ```
-* Now, you can start curling using `dwi67.coe332.tacc.cloud` instead of `localhost:5000`
-* Should you want to run a debug deployment to get back into, go back to `Diagnosis_API/kubernetes` folder and execute `kubectl apply -f dwi67-test-python-debug.yml`
+* Once you've updated the port number in the ingress, execute `kubectl apply -f app-prod-api-ingress.yml` for public access deployment.
+* Execute `kubectl get ingresss` to check that the public access URL is active.
+* Now, you can start curling using `dwi67.coe332.tacc.cloud` instead of `localhost:5000`. GET requests can be viewed in your browser, however, POST and DELETE requests need to be done in your terminal.
 
 
 <details>
 <summary><h3>Customization for Developers</h3></summary>
 
-* Running commands above will automatically pull the image specified in the scripts from the Docker Hub.
-If you wish to use your own Flask API in the Kubernetes cluster, you must change the name of image being pulled in `docker-compose.yml` and `flask-deployment.yml` to your preferred image on Docker Hub and then re-apply the Kubernetes depolyment.
+* Running kubernetes commands above will automatically pull the image specified in the scripts from the Docker Hub.
+If you wish to use your own Flask API in the Kubernetes cluster, you must change the name of image being pulled in `docker-compose.yml`, `app-prod-wrk-deployment.yml` and `app-prod-api-deployment.yml` to your preferred image on Docker Hub and then re-apply the Kubernetes depolyment.
 * You may also want to change the **Environment variable** in your `docker-compose.yml` to reflect your Redis service name. Example:
 ```console
 environment:
   - REDIS_IP=<redis-service-name>
 ```
-* The same change will also need to be done on the `flask-deployment.yml`:
+* The same change will also need to be done on the `app-prod-api-deployment.yml` and `app-prod-wrk-deployment.yml`:
 ```console
 env:
   - name: REDIS_IP
     value: <redis-service-name>
 ```
-* **Note** the <redis-service-name> need to match the name under `redis-service.yml` metadata. Example:
+* **Note** the <redis-service-name> need to match the name under `app-prod-db-service.yml` metadata. Example:
 ```console
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: <redis-service-name>
+```
+* If you wish to use a different URL for public access, change the host under spec in the `app-prod-wrk-deployment.yml` with `"<your-url>.coe332.tacc.cloud"`
+```console
+spec:
+  rules:
+  - host: "dwi67.coe332.tacc.cloud"
 ```
 
 </details>
@@ -363,14 +385,34 @@ Graph successfully saved
 ```
 <h1><img src="https://raw.githubusercontent.com/dhannywi/Diagnosis_API/29958a340db4a6a71938e4cbd72cc0de0f6df092/kubernetes/prod/image.png" width="500" height="500">
 
-#### > `user:$ curl localhost:5000/image -X DELETE
+#### > `user:$ curl localhost:5000/image -X DELETE`
 ```console
 Image deleted
 ```
 
+#### > `user:$ curl localhost:5000/help`
+```console
+    Usage: curl [host_name]:5000[ROUTE]
+    A Flask REST API for querying and returning interesting information from the breast cancer diagnosis dataset.
+    Route                           Method  What it returns
+    /data                           POST    Put data into Redis database
+    /data                           GET     Return entire data set from Redis database
+    /data                           DELETE  Delete data in Redis database
+    /id                             GET     Return json-formatted list of all "ID Number"
+    /id/<id_num>                    GET     Return all data associated with <id_num>
+    /outcome	                    GET	    Return a dictionary with information on malignant and benign cases with associated ID Numbers
+    /diagnosis-mean-radius          GET     Return a dictionary with Mean Radius information based on diagnosis
+    /image                  	    POST    Creates a plot and saves it to Redis
+    /image                  	    GET     Returns the plot created
+    /image                  	    DELETE  Delete the plot saved in Redis database
+    /jobs                           POST    Submits job to worker for analysis of data
+    /jobs/<job_id>                  GET     Returns the status of the <job_id>
+    /download/<job_id>              GET     Returns the plot associated with <job_id>
+    /help                           GET     Return help text that briefly describes each route
+```
 
 ### Jobs
-Creating Jobs
+#### 1. Creating Jobs > `curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: application/json"` replace the `start` and `end` with desired amount. 
 ```console
 user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: application/json"
 {
@@ -381,7 +423,7 @@ user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-T
 }
 ```
 
-Check job progress
+#### 2. Checking job progress > `curl localhost:5000/jobs/<job_id>` replace the `<job_id>` with the id generated from step 1.
 ```console
 user:$ curl localhost:5000/jobs/9905ff66-c92b-4e01-a455-a847af81b31d
 {
@@ -392,11 +434,17 @@ user:$ curl localhost:5000/jobs/9905ff66-c92b-4e01-a455-a847af81b31d
 }
 ```
 
-
+#### 3. Downloading job result > `curl localhost:5000/downloads/<job_id>` replace the `<job_id>` with the id generated from step 1.
+```console
+`user:$ curl localhost:5000/downloads/9905ff66-c92b-4e01-a455-a847af81b31d --output image.png`
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 19318  100 19318    0     0  1257k      0 --:--:-- --:--:-- --:--:-- 1257k
+```
 
 ## Additional Resources
 * [University of Wisconsin-Madison Research](https://pages.cs.wisc.edu/~olvi/uwmp/cancer.html)
-* [Breast Cancer Wisconsin (Prognostic) Data Set](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic))
+* [Breast Cancer Wisconsin (Diagnostic) Data Set](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic))
 
 ## Authors
 * Dhanny Indrakusuma
