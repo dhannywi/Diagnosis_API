@@ -192,9 +192,16 @@ Error. Breast cancer data not loaded in
 
 ### Example Outputs
 
+#### > `user:$ curl localhost:5000/data -X POST`
+```console
+Data loaded in
+```
+
 #### > `user:$ curl localhost:5000/data`
 ```console
-[...,
+[
+.
+  },
   {
     "Area SE": "156.8",
     "Compactness SE": "0.0496",
@@ -228,14 +235,115 @@ Error. Breast cancer data not loaded in
     "Worst Smoothness": "0.1272",
     "Worst Symmetry": "0.2833",
     "Worst Texture": "28.18"
-  }
+  },
+  {
+.
 ]
 ```
 
+#### > `user:$ curl localhost:5000/data -X DELETE`
 ```console
-user:$ curl localhost:5000/data -X DELETE
 Data deleted
 ```
+
+#### > `user:$ curl localhost:5000/id`
+```console
+[
+.
+  "91979701",
+  "901549",
+  "905520",
+.
+]
+```
+
+#### > `user:$ curl localhost:5000/id/<id_num>`
+With `91594602` in place of `<id_num>`
+```console
+{
+  "Area SE": "38.49",
+  "Compactness SE": "0.0163",
+  "Concave Points SE": "0.009423",
+  "Concavity SE": "0.02967",
+  "Diagnosis": "M",
+  "Fractal Dimension SE": "0.001718",
+  "ID Number": "91594602",
+  "Mean Area": "701.9",
+  "Mean Compactness": "0.08597",
+  "Mean Concave Points": "0.04335",
+  "Mean Concavity": "0.07486",
+  "Mean Fractal Dimension": "0.05915",
+  "Mean Perimeter": "97.26",
+  "Mean Radius": "15.05",
+  "Mean Smoothness": "0.09215",
+  "Mean Symmetry": "0.1561",
+  "Mean Texture": "19.07",
+  "Perimeter SE": "2.63",
+  "Radius SE": "0.386",
+  "Smoothness SE": "0.004952",
+  "Symmetry SE": "0.01152",
+  "Texture SE": "1.198",
+  "Worst Area": "967",
+  "Worst Compactness": "0.2101",
+  "Worst Concave Points": "0.112",
+  "Worst Concavity": "0.2866",
+  "Worst Fractal Dimension": "0.06954",
+  "Worst Perimeter": "113.8",
+  "Worst Radius": "17.58",
+  "Worst Smoothness": "0.1246",
+  "Worst Symmetry": "0.2282",
+  "Worst Texture": "28.06"
+}
+```
+
+#### > `user:$ curl localhost:5000/outcome`
+```console
+{
+  "Benign": {
+    "IDs": [
+      "918192",
+      .
+      .
+      "869224"
+    ],
+    "Total cases": 357
+  },
+  "Malignant": {
+    "IDs": [
+      "852781",
+      .
+      .
+   "866083"
+    ],
+    "Total cases": 212
+  }
+}
+```
+
+#### > `user:$ curl localhost:5000/diagnosis-mean-radius`
+```console
+{
+  "Benign": {
+    "cases": 357,
+    "mean_radius": {
+      "avg": 12.15,
+      "max": 17.85,
+      "min": 6.981
+    }
+  },
+  "Malignant": {
+    "cases": 212,
+    "mean_radius": {
+      "avg": 17.46,
+      "max": 28.11,
+      "min": 10.95
+    }
+  }
+}
+```
+
+#### > `user:$ curl localhost:5000/image -X POST`
+
 
 
 ### Jobs
