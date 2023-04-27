@@ -17,4 +17,4 @@ spec:
             service:
               name: dwi67-test-service-nodeport
               port:
-                  number: 30398
+                  number: 32386
