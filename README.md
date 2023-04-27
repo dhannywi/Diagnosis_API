@@ -383,7 +383,7 @@ Graph successfully saved
                                  Dload  Upload   Total   Spent    Left  Speed
 100 19318  100 19318    0     0  1257k      0 --:--:-- --:--:-- --:--:-- 1257k
 ```
-<h1><img src="https://raw.githubusercontent.com/dhannywi/Diagnosis_API/29958a340db4a6a71938e4cbd72cc0de0f6df092/kubernetes/prod/image.png" width="500" height="500">
+<img src="https://raw.githubusercontent.com/dhannywi/Diagnosis_API/29958a340db4a6a71938e4cbd72cc0de0f6df092/kubernetes/prod/image.png" width="500" height="500">
 
 #### > `user:$ curl localhost:5000/image -X DELETE`
 ```console
@@ -412,7 +412,7 @@ Image deleted
 ```
 
 ### Jobs
-#### 1. Creating Jobs > `curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: application/json"` replace the `start` and `end` with desired amount. 
+1. Creating Jobs > `curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: application/json"` replace the `start` and `end` with desired amount. 
 ```console
 user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-Type: application/json"
 {
@@ -423,7 +423,7 @@ user:$ curl localhost:5000/jobs -X POST -d '{"start":6, "end":12}' -H "Content-T
 }
 ```
 
-#### 2. Checking job progress > `curl localhost:5000/jobs/<job_id>` replace the `<job_id>` with the id generated from step 1.
+2. Checking job progress > `curl localhost:5000/jobs/<job_id>` replace the `<job_id>` with the id generated from step 1.
 ```console
 user:$ curl localhost:5000/jobs/9905ff66-c92b-4e01-a455-a847af81b31d
 {
@@ -434,7 +434,7 @@ user:$ curl localhost:5000/jobs/9905ff66-c92b-4e01-a455-a847af81b31d
 }
 ```
 
-#### 3. Downloading job result > `curl localhost:5000/downloads/<job_id>` replace the `<job_id>` with the id generated from step 1.
+3. Downloading job result > `curl localhost:5000/downloads/<job_id>` replace the `<job_id>` with the id generated from step 1.
 ```console
 `user:$ curl localhost:5000/downloads/9905ff66-c92b-4e01-a455-a847af81b31d --output image.png`
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
