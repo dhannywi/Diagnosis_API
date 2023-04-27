@@ -322,8 +322,29 @@ With `91594602` in place of `<id_num>`
 
 #### > `user:$ curl localhost:5000/diagnosis-mean-radius`
 ```console
-
+{
+  "Benign": {
+    "cases": 357,
+    "mean_radius": {
+      "avg": 12.15,
+      "max": 17.85,
+      "min": 6.981
+    }
+  },
+  "Malignant": {
+    "cases": 212,
+    "mean_radius": {
+      "avg": 17.46,
+      "max": 28.11,
+      "min": 10.95
+    }
+  }
+}
 ```
+
+#### > `user:$ curl localhost:5000/image -X POST`
+
+
 
 ### Jobs
 Creating Jobs
