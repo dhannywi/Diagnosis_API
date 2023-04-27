@@ -361,7 +361,7 @@ Graph successfully saved
                                  Dload  Upload   Total   Spent    Left  Speed
 100 19318  100 19318    0     0  1257k      0 --:--:-- --:--:-- --:--:-- 1257k
 ```
-<h1><img src="https://raw.githubusercontent.com/dhannywi/Diagnosis_API/29958a340db4a6a71938e4cbd72cc0de0f6df092/kubernetes/prod/image.png" width="100" height="100">
+<h1><img src="https://raw.githubusercontent.com/dhannywi/Diagnosis_API/29958a340db4a6a71938e4cbd72cc0de0f6df092/kubernetes/prod/image.png" width="500" height="500">
 
 #### > `user:$ curl localhost:5000/image -X DELETE
 ```console
