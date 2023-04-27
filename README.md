@@ -187,9 +187,9 @@ Below are the routes for you to request data from:
 | 9. | `/image` | GET | Return plot image to the user, if present in the database |
 | 10. | `/image` | DELETE | Delete the plot image from the database |
 | 11. | `/jobs` | POST | Submits job to worker for analysis of data |
-| 11. | `/jobs/<job_id>` | GET | Returns the status of the <job_id> |
-| 11. | `/download/<job_id>` | GET | Returns the plot associated with <job_id> |
-| 10. | `/help` | GET | Return help text (string) that briefly describes each route |
+| 12. | `/jobs/<job_id>` | GET | Returns the status of the <job_id> |
+| 13. | `/download/<job_id>` | GET | Returns the plot associated with <job_id> |
+| 14. | `/help` | GET | Return help text (string) that briefly describes each route |
 
 ### Querying Data Using the REST API
 Since we need to keep the server running in order to make requests, open an additional shell and change your directory to the same directory your server is running. The data has been automatically loaded and you can start querying. Keep in mind that if you accidentally queried using the `DELETE` method, you will need to query using the `POST` method first in order to re-load the dataset into the database. Otherwise, when data has not been loaded/has been deleted, you will receive the following error message:
@@ -351,7 +351,22 @@ With `91594602` in place of `<id_num>`
 ```
 
 #### > `user:$ curl localhost:5000/image -X POST`
+```console
+Graph successfully saved
+```
 
+#### > `user:$ curl localhost:5000/image -X GET --output image.png`
+```console
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 19318  100 19318    0     0  1257k      0 --:--:-- --:--:-- --:--:-- 1257k
+```
+<h1><img src="https://raw.githubusercontent.com/dhannywi/Diagnosis_API/29958a340db4a6a71938e4cbd72cc0de0f6df092/kubernetes/prod/image.png" width="30" height="30">
+
+#### > `user:$ curl localhost:5000/image -X DELETE
+```console
+Image deleted
+```
 
 
 ### Jobs
