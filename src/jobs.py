@@ -9,10 +9,11 @@ redis_ip = os.environ.get('REDIS_IP', '172.17.0.1')
 if not redis_ip:
     raise Exception()
 
-q = HotQueue("queue", host=redis_ip, port=6379, db=2)
-rd0 = redis.Redis(host=redis_ip, port=6379, db=0, decode_responses=True) 
+rd0 = redis.Redis(host=redis_ip, port=6379, db=0, decode_responses=True)
 jdb = redis.Redis(host=redis_ip, port=6379, db=1)
+q = HotQueue("queue", host=redis_ip, port=6379, db=2)
 img_rd = redis.Redis(host=redis_ip, port=6379, db=3)
+plot_rd = redis.Redis(host=redis_ip, port=6379, db=4)
 
 def _generate_jid():
     """

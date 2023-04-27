@@ -9,6 +9,13 @@ from hotqueue import HotQueue
 
 @q.worker
 def execute_job(jid):
+    """
+    Executes job for the given <jid>.
+    Args:
+        jid (): jod ID number
+    Returns:
+        none
+    """
     if len(rd0.keys()) == 0:
         return f'Error. Breast cancer data not loaded in\n', 404
     else:
@@ -31,16 +38,13 @@ def execute_job(jid):
         plt.xlabel("Diagnosis")
         plt.ylabel("Number of Cases")
         plt.title("Breast Cancer Cases Diagnosis")
-
         plt.savefig('./cancer_diagnosis.png')
         
         with open('./cancer_diagnosis.png', 'rb') as f:
             img = f.read()
         img_rd.hset(jid, 'image', img)
         update_image_job(jid, img)
-        update_job_status(jid, 'complete')
-
-        
+        update_job_status(jid, 'complete')       
 
         
 execute_job()

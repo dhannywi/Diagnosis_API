@@ -6,7 +6,7 @@ import csv
 import matplotlib.pyplot as plt
 import os
 import yaml
-from jobs import rd0, img_rd, q, add_job, get_job_by_id
+from jobs import rd0, plot_rd, img_rd, q, add_job, get_job_by_id
 
 
 app = Flask(__name__)
@@ -158,13 +158,13 @@ def get_cases() -> dict:
 
 @app.route('/diagnosis-mean-radius', methods = ['GET'])
 def get_details() -> dict:
-    '''
+    """
     Returns information on mean radius max, min and avg, based on diagnosis
     Args:
         None
     Returns:
         data_dict (dict): Nested dictionary containing mean radius information based on diagnosis
-    '''
+    """
     if len(rd0.keys()) == 0:
         return f'Error. Breast cancer data not loaded in\n', 404
     
@@ -201,7 +201,7 @@ def image() -> str:
         (str): status info whether 'POST' or 'DELETE' method was executed
         image (png): image of the graph created utilizing the breast cancer data  
     """
-    global rd0, img_rd
+    global rd0
     if request.method == 'POST':
         graph_data = {}
         if len(rd0.keys()) == 0:
@@ -217,15 +217,15 @@ def image() -> str:
         plt.title("Breast Cancer Cases Diagnosis")
         plt.savefig('./cancer_prognosis.png')
         image_data = open('./cancer_prognosis.png', 'rb').read()
-        img_db.set('image', image_data)
+        plot_rd.set('image', image_data)
         return f'Graph successfully saved\n'
     elif request.method == 'GET':
         if len(rd0.keys()) == 0:
             return f'Error. Breast cancer data not loaded in\n', 404
-        elif len(img_rd.keys()) == 0:
+        elif len(plot_rd.keys()) == 0:
             return f'Error. Image not loaded in\n', 404
         try:
-            image_data = img_rd.get('image')
+            image_data = plot_rd.get('image')
             if image_data is None:
                 return f'Error. Image not loaded in\n', 404
             with open('./cancer_prognosis.png', 'wb') as image_file:
@@ -235,9 +235,9 @@ def image() -> str:
             return f'Error. Unable to fetch image\n', 404
     elif request.method == 'DELETE':
         try:
-            if len(img_rd.keys()) == 0:
+            if len(plot_rd.keys()) == 0:
                 return f'Error. Image not loaded in', 404
-            img_db.flushdb()
+            plot_rd.flushdb()
             return f'Image deleted\n'
         except Exception as err:
             return f'Error. Unable to delete image\n', 404
