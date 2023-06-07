@@ -81,7 +81,7 @@ You have the option to build this project from source, or use the provided Docke
 We describe below the installation process using terminal commands, which are expected to run on a Ubuntu 20.04.5 machine with Python3. Installation may differ for other systems.
 
 
-### Automate deployment using `docker-compose` from source
+### 1. Automate deployment using `docker-compose` from source
 Since this is a Docker build, the requirements need not be installed, as it will automatically be done on the Docker image. All commands, unless otherwise noted, are to be run in a terminal.
 
 * First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
@@ -124,7 +124,7 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
 
-### Kubernetes Deployment & enabling public access
+### 2. Kubernetes Deployment & enabling public access
 To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`, and execute these commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
 * `kubectl apply -f app-prod-db-pvc.yml` -- setting up the PVC to save the Redis data from the Flask app.
 * `kubectl apply -f app-prod-db-deployment.yml` -- creating a deployment for the Redis database so that the desired state for Redis is always met.
