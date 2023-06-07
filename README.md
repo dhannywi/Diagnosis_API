@@ -124,7 +124,7 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
 
-## Kubernetes Deployment & enabling public access
+### Kubernetes Deployment & enabling public access
 To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`, and execute these commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
 * `kubectl apply -f app-prod-db-pvc.yml` -- setting up the PVC to save the Redis data from the Flask app.
 * `kubectl apply -f app-prod-db-deployment.yml` -- creating a deployment for the Redis database so that the desired state for Redis is always met.
