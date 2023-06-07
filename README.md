@@ -81,7 +81,7 @@ You have the option to build this project from source, or use the provided Docke
 We describe below the installation process using terminal commands, which are expected to run on a Ubuntu 20.04.5 machine with Python3. Installation may differ for other systems.
 
 
-### Option 1: Automate deployment using `docker-compose` from source
+### Automate deployment using `docker-compose` from source
 Since this is a Docker build, the requirements need not be installed, as it will automatically be done on the Docker image. All commands, unless otherwise noted, are to be run in a terminal.
 
 * First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
@@ -123,22 +123,8 @@ dhannywi/diagnosis_app   1.0       2a42caa1289e   3 minutes ago   1.06GB
     4. Note: If you are using your own image for kubernetes deployment, please see details in [Customization for Developers](https://github.com/dhannywi/Diagnosis_API/tree/main#customization-for-developers) prior to running kubernetes deployments.
 * When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
-## Option 2: Deployment using images from docker hub
-Similar to option 1, you will need to have **Docker 20.10.12** installed to run the commands. Howeve, we will be pulling existing images in the docker hub instead of building it from source.
-* First, install Docker: `sudo apt-get install docker` or follow installation instructions for [Docker Desktop](https://www.docker.com/get-started/) for your system. We are using **Docker 20.10.12**
-* Next, install docker-compose: `sudo apt-get install docker-compose-plugin` or follow the instructions [here](https://docs.docker.com/compose/install/linux/). We are using **Docker Compose 1.25.0**
-* Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`
-* Then, navigate to the `Diagnosis_API` directory by executing the command `cd Diagnosis_API`
-* Create a `data` folder inside the `Diagnosis_API/docker/` directory by executing the command `mkdir data`. This allows Redis to store data in the disk so that the data is persistent, even when the services are killed.
-* Pull images from docker hub: `docker pull redis:7`, `docker pull dhannywi/diagnosis_wrk:1.0` and `docker pull dhannywi/diagnosis_app:1.0`.
-* Go to the root `Diagnosis_API` folder and execute `docker-compose -f docker/docker-compose.yml up` to get the images running and services connected.
-* Check if sevices are connected by executing `docker ps -a`
-* Now you are ready to use the REST API locally using curl localhost:5000/<route>
-* Follow the steps in Kubernetes deployment to enable public access, please note that if you are using different images from ones specified, see details in [Customization for Developers](https://github.com/dhannywi/Diagnosis_API/tree/main#customization-for-developers) prior to running kubernetes deployments.
-* When you are done using the API, take down the services by executing `docker-compose -f docker/docker-compose.yml down` inside the `Diagnosis_API` folder
 
-
-## Option 3: Kubernetes Deployment & enabling public access
+## Kubernetes Deployment & enabling public access
 To run this app on a Kubernetes cluster and eventually make the API publicly accessible, enter the following commands in the console from which you have Kubernetes access. Clone the  repository: `https://github.com/dhannywi/Diagnosis_API.git`, and execute these commands inside the `Diagnosis_API/kubernetes/prod` folder. **Please follow order of execution**:
 * `kubectl apply -f app-prod-db-pvc.yml` -- setting up the PVC to save the Redis data from the Flask app.
 * `kubectl apply -f app-prod-db-deployment.yml` -- creating a deployment for the Redis database so that the desired state for Redis is always met.
