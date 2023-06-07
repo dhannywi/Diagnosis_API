@@ -452,4 +452,3 @@ user:$ curl localhost:5000/jobs/9905ff66-c92b-4e01-a455-a847af81b31d
 ## Authors
 * Dhanny Indrakusuma
 * Pranjal Adhikari
-* Amanda Lee
