@@ -6,7 +6,7 @@
 <img src="https://img.icons8.com/color/512/pink-ribbon.png" width="30" height="30">
 </h1>
 
-Docker containerized REST API to query data on Breast Cancer Diagnosis, with Redis NoSQL Database integration and public access deployment using Kubernetes.  
+Docker containerized REST API Microservice to query data on Breast Cancer Diagnosis, with Redis NoSQL Database integration and public access deployment using Kubernetes.  
 </div>
 
 #
